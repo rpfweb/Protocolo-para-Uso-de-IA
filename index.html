@@ -347,6 +347,32 @@ header .subtitulo {
   gap: 6px;
 }
 .deia-callout-titulo .icone { font-size: 14px; }
+.deia-callout-link {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--azul-mid);
+  text-decoration: none;
+  padding: 2px 8px;
+  border: 1px solid var(--deia-borda);
+  border-radius: 20px;
+  white-space: nowrap;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.deia-callout-link:hover { background: var(--deia-borda); color: #fff; }
+.checklist-secao {
+  display: block !important;
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--azul);
+  padding: 6px 0 4px;
+  border-bottom: 1px solid var(--cinza-borda);
+  margin-top: 6px;
+}
 .deia-callout p { font-size: 13.5px; color: #1e3a5f; line-height: 1.55; }
 .deia-callout p + p { margin-top: 8px; }
 .deia-callout a {
@@ -414,7 +440,7 @@ footer {
   font-family: system-ui, sans-serif;
   font-size: 12px;
   color: var(--texto-sec);
-  text-align: center;
+  text-align: left;
   line-height: 1.8;
 }
 footer em { font-style: normal; color: var(--azul); font-weight: 600; }
@@ -683,12 +709,11 @@ header { position: relative; }
     <p class="instituicao">Cefor / Ifes — Pesquisa EDR — Fávero (2026)</p>
     <h1>Protocolo de Atenção para Criação de Conteúdos Educacionais com IA Generativa</h1>
     <p class="subtitulo">O protocolo é uma ferramenta criada a partir de uma pesquisa e que busca permitir aos docentes ou aos profissionais da educação pontos de reflexão e um sistema de etapas para escolha e uso de IAGen para produção de conteúdos educacionais.</p>
-    <a class="deia-link" href="https://chatgpt.com/g/g-68a1d7869dc08191b2273baa1d773ac8-deia-designer-educacional-experimental" target="_blank" rel="noopener">🤖 Acessar a DeIA</a>
   </div>
   <button class="btn-ajuda" onclick="mostrarTutorial()" aria-label="Como usar este protocolo — abrir tutorial">?</button>
 </header>
 
-<div class="aviso-iterativo wrapper" style="margin:16px auto 0;border-left:none;border-radius:var(--radius);text-align:center;">
+<div class="aviso-iterativo wrapper" style="margin:16px auto 0;border-left:none;border-radius:var(--radius);">
   <strong>Uso iterativo:</strong> o protocolo é sequencial, mas não linear — resultados negativos em etapas posteriores implicam retorno às etapas anteriores para refinamento. Seu progresso é salvo automaticamente neste navegador: você pode fechar a página e continuar depois, no mesmo dispositivo.
 </div>
 
@@ -774,7 +799,7 @@ header { position: relative; }
         </div>
 
         <div class="deia-callout">
-          <div class="deia-callout-titulo"><span class="icone">🤖</span> Quando usar a DeIA nesta etapa</div>
+          <div class="deia-callout-titulo"><span class="icone">🤖</span> Quando usar a DeIA nesta etapa<a class="deia-callout-link" href="https://chatgpt.com/g/g-68a1d7869dc08191b2273baa1d773ac8-deia-designer-educacional-experimental" target="_blank" rel="noopener">Acessar a DeIA ↗</a></div>
           <p class="deia-pergunta">Pergunte à DeIA: <strong>"Meu objetivo de aprendizagem está claro e observável?"</strong></p>
           <p>Ela atua como designer instrucional de plantão: ajuda a formular objetivos em linguagem pedagógica precisa, delinear o perfil do público e definir critérios de qualidade alinhados a Mayer (2005) e Sweller (1988).</p>
         </div>
@@ -817,7 +842,7 @@ header { position: relative; }
           </li>
           <li data-id="2-4">
             <input type="checkbox" id="c-2-4" onchange="marcar(this)">
-            <label for="c-2-4"><strong>Conformidade com a proteção de dados:</strong> o sistema trata dados em conformidade com a LGPD (Lei nº 13.709/2018) e, quando aplicável, com o AI Act (UE, 2024). Não retém insumos pedagógicos sensíveis nem dados de estudantes.</label>
+            <label for="c-2-4"><strong>Conformidade de proteção de dados:</strong> o sistema trata dados em conformidade com a legislação de cada país. Não retém insumos pedagógicos sensíveis nem dados de estudantes.</label>
           </li>
           <li data-id="2-5">
             <input type="checkbox" id="c-2-5" onchange="marcar(this)">
@@ -839,7 +864,7 @@ header { position: relative; }
         </div>
 
         <div class="deia-callout">
-          <div class="deia-callout-titulo"><span class="icone">🤖</span> Quando usar a DeIA nesta etapa</div>
+          <div class="deia-callout-titulo"><span class="icone">🤖</span> Quando usar a DeIA nesta etapa<a class="deia-callout-link" href="https://chatgpt.com/g/g-68a1d7869dc08191b2273baa1d773ac8-deia-designer-educacional-experimental" target="_blank" rel="noopener">Acessar a DeIA ↗</a></div>
           <p class="deia-pergunta">Pergunte à DeIA: <strong>"Qual ferramenta de IA é mais adequada para este tipo de tarefa?"</strong></p>
           <p>Descreva a tarefa definida na Etapa 1 e peça a análise segundo os critérios acima — transparência, proteção de dados, compatibilidade institucional. O julgamento final permanece com o professor.</p>
         </div>
@@ -867,29 +892,53 @@ header { position: relative; }
 
         <p class="checklist-titulo">Elementos do prompt</p>
         <ul class="checklist" id="cl-3">
+          <li class="checklist-secao">1. Parametrização Pedagógica (O "Quê")</li>
           <li data-id="3-1">
             <input type="checkbox" id="c-3-1" onchange="marcar(this)">
-            <label for="c-3-1"><strong>Papel e contexto:</strong> definido o papel que a IA deve assumir (ex.: "Você é um redator de material didático para EaD em nível técnico") e o contexto institucional relevante.</label>
+            <label for="c-3-1"><strong>Papel e contexto:</strong> defina quem a IA simulará (especialista em quê?) e o cenário institucional.</label>
           </li>
           <li data-id="3-2">
             <input type="checkbox" id="c-3-2" onchange="marcar(this)">
-            <label for="c-3-2"><strong>Objetivo de aprendizagem:</strong> incorporado explicitamente no prompt o objetivo definido na Etapa 1, para que o output seja orientado à meta pedagógica e não a um tópico genérico.</label>
+            <label for="c-3-2"><strong>Objetivo:</strong> alinhe o comando diretamente à meta pedagógica (Etapa 1).</label>
           </li>
           <li data-id="3-3">
             <input type="checkbox" id="c-3-3" onchange="marcar(this)">
-            <label for="c-3-3"><strong>Público-alvo:</strong> especificados nível de escolaridade, conhecimentos prévios e eventuais necessidades do público definidas na Etapa 1.</label>
+            <label for="c-3-3"><strong>Público-alvo:</strong> especifique o nível de escolaridade e demais informações possíveis.</label>
           </li>
+          <li class="checklist-secao">2. Engenharia do Comando (O "Como")</li>
           <li data-id="3-4">
             <input type="checkbox" id="c-3-4" onchange="marcar(this)">
-            <label for="c-3-4"><strong>Formato e extensão:</strong> definidos tipo de conteúdo (lista, texto corrido, tabela, questões etc.), extensão aproximada e estrutura esperada.</label>
+            <label for="c-3-4"><strong>Estrutura:</strong> separe visualmente instrução, contexto, exemplos e tarefa.</label>
           </li>
           <li data-id="3-5">
             <input type="checkbox" id="c-3-5" onchange="marcar(this)">
-            <label for="c-3-5"><strong>Restrições éticas e técnicas:</strong> indicadas ao sistema as limitações a observar — vieses a evitar, dados sensíveis a não mencionar, referências a não inventar, nível de linguagem adequado.</label>
+            <label for="c-3-5"><strong>Léxico de Domínio:</strong> use os termos técnicos precisos da sua área (léxico de domínio) para ativar o conhecimento correto da IA.</label>
           </li>
           <li data-id="3-6">
             <input type="checkbox" id="c-3-6" onchange="marcar(this)">
-            <label for="c-3-6"><strong>Critério de qualidade esperado:</strong> indicados os princípios cognitivos que o material deve respeitar — carga cognitiva adequada, princípio da coerência e princípio da sinalização (Mayer, 2005; Sweller, 1988) — além do padrão de linguagem esperado (ex.: acessível a estudantes do 1º ano).</label>
+            <label for="c-3-6"><strong>Exemplificação (Few-Shot):</strong> forneça de 1 a 3 exemplos do formato e extensão desejados.</label>
+          </li>
+          <li data-id="3-7">
+            <input type="checkbox" id="c-3-7" onchange="marcar(this)">
+            <label for="c-3-7"><strong>Raciocínio (Chain-of-Thought):</strong> exija passo a passo apenas para tarefas complexas; vá direto ao ponto nas simples.</label>
+          </li>
+          <li class="checklist-secao">3. Controle de Qualidade e Limites (As "Restrições")</li>
+          <li data-id="3-8">
+            <input type="checkbox" id="c-3-8" onchange="marcar(this)">
+            <label for="c-3-8"><strong>Restrições:</strong> proíba vieses, dados sensíveis e invenção de referências.</label>
+          </li>
+          <li data-id="3-9">
+            <input type="checkbox" id="c-3-9" onchange="marcar(this)">
+            <label for="c-3-9"><strong>Filtro e Âncoras (IDs):</strong> ao enviar vários textos, identifique-os com tags (ex: [Artigo 1]) para forçar a atenção da IA e evitar alucinações.</label>
+          </li>
+          <li data-id="3-10">
+            <input type="checkbox" id="c-3-10" onchange="marcar(this)">
+            <label for="c-3-10"><strong>Critérios:</strong> exija respeito à adequação cognitiva (Mayer; Sweller) e ao tom de linguagem.</label>
+          </li>
+          <li class="checklist-secao">4. Avaliação e Refinamento</li>
+          <li data-id="3-11">
+            <input type="checkbox" id="c-3-11" onchange="marcar(this)">
+            <label for="c-3-11"><strong>Teste e Itere:</strong> a máquina responde à estrutura. Ajuste palavras ou exemplos se o primeiro resultado falhar.</label>
           </li>
         </ul>
 
@@ -899,9 +948,9 @@ header { position: relative; }
         </div>
 
         <div class="deia-callout">
-          <div class="deia-callout-titulo"><span class="icone">🤖</span> Quando usar a DeIA nesta etapa</div>
+          <div class="deia-callout-titulo"><span class="icone">🤖</span> Quando usar a DeIA nesta etapa<a class="deia-callout-link" href="https://chatgpt.com/g/g-68a1d7869dc08191b2273baa1d773ac8-deia-designer-educacional-experimental" target="_blank" rel="noopener">Acessar a DeIA ↗</a></div>
           <p class="deia-pergunta">Pergunte à DeIA: <strong>"Como posso melhorar este prompt?"</strong></p>
-          <p>Envie o rascunho do prompt e peça a verificação dos seis elementos acima antes de submetê-lo à ferramenta escolhida na Etapa 2.</p>
+          <p>Envie o rascunho do prompt e peça a verificação dos elementos acima antes de submetê-lo à ferramenta escolhida na Etapa 2.</p>
         </div>
       </div>
     </div>
@@ -955,7 +1004,7 @@ header { position: relative; }
         </div>
 
         <div class="deia-callout">
-          <div class="deia-callout-titulo"><span class="icone">🤖</span> Quando usar a DeIA nesta etapa</div>
+          <div class="deia-callout-titulo"><span class="icone">🤖</span> Quando usar a DeIA nesta etapa<a class="deia-callout-link" href="https://chatgpt.com/g/g-68a1d7869dc08191b2273baa1d773ac8-deia-designer-educacional-experimental" target="_blank" rel="noopener">Acessar a DeIA ↗</a></div>
           <p class="deia-pergunta">Pergunte à DeIA: <strong>"Que inconsistências técnicas você identifica neste conteúdo?"</strong></p>
           <p>Cole o conteúdo gerado e use a resposta como apoio à revisão técnica — a decisão sobre cada ajuste permanece com o docente.</p>
         </div>
@@ -1007,7 +1056,7 @@ header { position: relative; }
         </div>
 
         <div class="deia-callout">
-          <div class="deia-callout-titulo"><span class="icone">🤖</span> Quando usar a DeIA nesta etapa</div>
+          <div class="deia-callout-titulo"><span class="icone">🤖</span> Quando usar a DeIA nesta etapa<a class="deia-callout-link" href="https://chatgpt.com/g/g-68a1d7869dc08191b2273baa1d773ac8-deia-designer-educacional-experimental" target="_blank" rel="noopener">Acessar a DeIA ↗</a></div>
           <p class="deia-pergunta">Pergunte à DeIA: <strong>"Este material está alinhado aos objetivos de aprendizagem?"</strong></p>
           <p>Use a resposta como contraponto à sua leitura integral — a validação pedagógica é humana e não se delega.</p>
         </div>
@@ -1060,7 +1109,7 @@ header { position: relative; }
         </div>
 
         <div class="deia-callout">
-          <div class="deia-callout-titulo"><span class="icone">🤖</span> Quando usar a DeIA nesta etapa</div>
+          <div class="deia-callout-titulo"><span class="icone">🤖</span> Quando usar a DeIA nesta etapa<a class="deia-callout-link" href="https://chatgpt.com/g/g-68a1d7869dc08191b2273baa1d773ac8-deia-designer-educacional-experimental" target="_blank" rel="noopener">Acessar a DeIA ↗</a></div>
           <p class="deia-pergunta">Pergunte à DeIA: <strong>"Há riscos éticos, vieses ou problemas de acessibilidade?"</strong></p>
           <p>Peça uma varredura final antes da publicação e confirme cada apontamento nas verificações acima.</p>
         </div>
@@ -1086,23 +1135,23 @@ header { position: relative; }
           transformando a experiência individual em conhecimento institucional que alimenta o próximo ciclo.
         </p>
 
-        <p class="checklist-titulo">Verificações desta etapa</p>
+        <p class="checklist-titulo">Indicações e boas práticas desta etapa</p>
         <ul class="checklist" id="cl-7">
           <li data-id="7-1">
             <input type="checkbox" id="c-7-1" onchange="marcar(this)">
-            <label for="c-7-1"><strong>Coletar indicadores de desempenho:</strong> obtidos dados sobre o desempenho dos estudantes com o conteúdo (engajamento, resultados de avaliação, feedbacks) que permitam avaliar a efetividade do material produzido.</label>
+            <label for="c-7-1"><strong>Indicação — Coletar indicadores de desempenho:</strong> quando possível, colete dados sobre o desempenho dos estudantes com o conteúdo (engajamento, resultados de avaliação, feedbacks) para avaliar a efetividade do material produzido.</label>
           </li>
           <li data-id="7-2">
             <input type="checkbox" id="c-7-2" onchange="marcar(this)">
-            <label for="c-7-2"><strong>Registrar ajustes realizados:</strong> documentadas as modificações feitas no conteúdo gerado pela IA, com indicação das razões pedagógicas — construindo um histórico de uso que orienta próximas iterações.</label>
+            <label for="c-7-2"><strong>Boa prática — Registrar ajustes realizados:</strong> documente as modificações feitas no conteúdo gerado pela IA, com indicação das razões pedagógicas — construindo um histórico de uso que orienta próximas iterações.</label>
           </li>
           <li data-id="7-3">
             <input type="checkbox" id="c-7-3" onchange="marcar(this)">
-            <label for="c-7-3"><strong>Utilizar informações para o próximo ciclo:</strong> os indicadores coletados informam ajustes na intencionalidade pedagógica (Etapa 1), na escolha da ferramenta (Etapa 2) ou no design do prompt (Etapa 3) do próximo conteúdo.</label>
+            <label for="c-7-3"><strong>Sugestão — Utilizar informações para o próximo ciclo:</strong> os indicadores coletados podem informar ajustes na intencionalidade pedagógica (Etapa 1), na escolha da ferramenta (Etapa 2) ou no design do prompt (Etapa 3) do próximo conteúdo.</label>
           </li>
           <li data-id="7-4">
             <input type="checkbox" id="c-7-4" onchange="marcar(this)">
-            <label for="c-7-4"><strong>Compartilhar boas práticas:</strong> os aprendizados relevantes foram compartilhados com pares — contribuindo para a construção de uma cultura institucional de uso ético e pedagógico da IA.</label>
+            <label for="c-7-4"><strong>Quando possível — Compartilhar boas práticas:</strong> compartilhe os aprendizados relevantes com pares — contribuindo para a construção de uma cultura institucional de uso ético e pedagógico da IA.</label>
           </li>
         </ul>
 
@@ -1112,7 +1161,7 @@ header { position: relative; }
         </div>
 
         <div class="deia-callout">
-          <div class="deia-callout-titulo"><span class="icone">🤖</span> Quando usar a DeIA nesta etapa</div>
+          <div class="deia-callout-titulo"><span class="icone">🤖</span> Quando usar a DeIA nesta etapa<a class="deia-callout-link" href="https://chatgpt.com/g/g-68a1d7869dc08191b2273baa1d773ac8-deia-designer-educacional-experimental" target="_blank" rel="noopener">Acessar a DeIA ↗</a></div>
           <p class="deia-pergunta">Pergunte à DeIA: <strong>"Que melhorias podem ser feitas para uma próxima versão?"</strong></p>
           <p>Apresente os indicadores coletados e registre as sugestões úteis no repositório de práticas.</p>
         </div>
@@ -1184,7 +1233,7 @@ header { position: relative; }
 
   <footer>
     <p>Fávero, R. P. (2026). Protocolo de Atenção para Criação de Conteúdos Educacionais com IAGen. In <em>Carta Náutica para Travessia: Inteligência Artificial Generativa e Produção de Conteúdos Educacionais</em> (Seção 3.3). Cefor/Ifes.</p>
-    <p>Protocolo baseado em: Floridi (2024) · Mayer (2005) · Sweller (1988) · Selvam &amp; González Vallejo (2025) · Ministério da Educação (2026) · LGPD (2018) · AI Act (UE, 2024) · PL 2.338/2023 · Lei nº 9.610/1998</p>
+    <p>Protocolo baseado em: AI Act (UE, 2024) · Aristóteles (1991) · Fávero (2022, 2025) · Fávero &amp; Accioly (2025) · Floridi (2024) · Freire (1996) · Lei nº 9.610/1998 · LGPD (2018) · López-Meneses et al. (2025) · Mayer (2005) · Ministério da Educação (2026) · PL 2.338/2023 · Selvam &amp; González Vallejo (2025) · Sweller (1988) · Vygotsky (1988)</p>
     <p style="margin-top:8px;font-size:11px;opacity:.7;">
       <strong>Como seu trabalho é salvo:</strong> o progresso é gravado automaticamente neste navegador e reaparece quando você reabre a página no mesmo dispositivo.
       Nenhum dado é enviado à internet — tudo permanece no seu computador.
@@ -1621,7 +1670,7 @@ function gerarRelatorio() {
   html += '<div class="rel-resumo-item"><span class="rel-resumo-rotulo">Verificações marcadas</span><span class="rel-resumo-valor">' + totMarcados + '/' + totItens + '</span></div>';
   html += '<div class="rel-resumo-item"><span class="rel-resumo-rotulo">Progresso geral</span><span class="rel-resumo-valor">' + pct + '%</span></div>';
   html += '</div>';
-  html += '<div class="rel-footer">Protocolo de Atenção para Criação de Conteúdos Educacionais com IA Generativa · Fávero (2026) · Cefor/Ifes<br>Baseado em: Floridi (2024) · Mayer (2005) · Sweller (1988) · LGPD (2018) · AI Act (UE, 2024)</div>';
+  html += '<div class="rel-footer">Protocolo de Atenção para Criação de Conteúdos Educacionais com IA Generativa · Fávero (2026) · Cefor/Ifes<br>Baseado em: AI Act (UE, 2024) · Aristóteles (1991) · Fávero (2022, 2025) · Fávero &amp; Accioly (2025) · Floridi (2024) · Freire (1996) · Lei nº 9.610/1998 · LGPD (2018) · López-Meneses et al. (2025) · Mayer (2005) · Ministério da Educação (2026) · PL 2.338/2023 · Selvam &amp; González Vallejo (2025) · Sweller (1988) · Vygotsky (1988)</div>';
   document.getElementById('rel-corpo').innerHTML = html;
   const ov = document.getElementById('rel-overlay');
   ov.removeAttribute('hidden');
