@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protocolo de Atenção para Criação de Conteúdos com IA — Cefor/Ifes</title>
+<style>
+/* ── Reset & variáveis ────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --azul:       #1a3a5c;
+  --azul-mid:   #2a5298;
+  --azul-claro: #e8f0fb;
+  --deia-bg:    #f0f7ff;
+  --deia-borda: #5b9bd5;
+  --deia-texto: #2e6da4;
+  --cinza:      #f4f5f7;
+  --cinza-borda:#d0d4db;
+  --texto:      #1c2126;
+  --texto-sec:  #4a5568;
+  --verde:      #2d6a2d;
+  --verde-bg:   #edf7ed;
+  --amarelo-bg: #fffbea;
+  --amarelo:    #b7791f;
+  --radius:     6px;
+  --sombra:     0 2px 8px rgba(0,0,0,.10);
+}
+
+body {
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--texto);
+  background: #f9f9f9;
+}
+
+/* ── Layout ───────────────────────────────────────────────────────── */
+.wrapper {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+}
+
+/* ── Cabeçalho ────────────────────────────────────────────────────── */
+header {
+  background: var(--azul);
+  color: #fff;
+  padding: 36px 28px 28px;
+  border-bottom: 4px solid var(--azul-mid);
+}
+header .instituicao {
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  opacity: .75;
+  margin-bottom: 8px;
+}
+header h1 {
+  font-size: clamp(18px, 3.5vw, 26px);
+  font-weight: normal;
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+header .subtitulo {
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  opacity: .85;
+  line-height: 1.55;
+  max-width: 620px;
+  margin-top: 10px;
+}
+.deia-link {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: Inter, system-ui, -apple-system, sans-serif; font-size: 12px;
+  color: rgba(255,255,255,.82);
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,.32);
+  border-radius: 20px;
+  padding: 4px 12px;
+  margin-top: 12px;
+  transition: background .15s, color .15s;
+}
+.deia-link:hover { background: rgba(255,255,255,.16); color: #fff; }
+
+/* ── Barra de progresso ───────────────────────────────────────────── */
+.progresso-bloco {
+  background: #fff;
+  border: 1px solid var(--cinza-borda);
+  border-top: none;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+  color: var(--texto-sec);
+}
+.progresso-texto { white-space: nowrap; font-weight: 600; color: var(--azul); }
+.progresso-barra-wrap {
+  flex: 1;
+  height: 8px;
+  background: var(--cinza-borda);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progresso-barra {
+  height: 100%;
+  background: var(--verde);
+  border-radius: 4px;
+  transition: width .4s ease;
+}
+.btn-reset {
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  color: var(--texto-sec);
+  background: none;
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--radius);
+  padding: 4px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn-reset:hover { background: var(--cinza); }
+
+/* ── Identificação e ciclos ───────────────────────────────────────── */
+.ciclo-bloco {
+  background: #fff;
+  border: 1px solid var(--cinza-borda);
+  border-top: none;
+  padding: 14px 24px 16px;
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+}
+.ciclo-linha { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 10px; }
+.ciclo-label { font-weight: 600; color: var(--azul); white-space: nowrap; }
+#ciclo-select {
+  flex: 1; min-width: 140px; max-width: 320px;
+  padding: 4px 8px; font-size: 13px; font-family: inherit;
+  border: 1px solid var(--cinza-borda); border-radius: var(--radius); background: #fff; color: var(--texto);
+}
+.btn-ciclo {
+  font-size: 11px; color: var(--texto-sec); background: none;
+  border: 1px solid var(--cinza-borda); border-radius: var(--radius);
+  padding: 4px 10px; cursor: pointer; white-space: nowrap; font-family: inherit;
+}
+.btn-ciclo:hover { background: var(--cinza); }
+.ident-campos { display: flex; flex-wrap: wrap; gap: 10px; }
+.ident-campos label {
+  display: flex; flex-direction: column; gap: 3px;
+  font-weight: 600; color: var(--texto-sec); flex: 2; min-width: 180px;
+}
+.ident-campos .campo-data { flex: 1; min-width: 130px; }
+.ident-campos input {
+  font-size: 14px; padding: 6px 8px; font-family: inherit; font-weight: normal;
+  border: 1px solid var(--cinza-borda); border-radius: var(--radius); color: var(--texto);
+}
+
+/* ── Aviso de iteratividade ───────────────────────────────────────── */
+.aviso-iterativo {
+  background: var(--amarelo-bg);
+  border-left: 4px solid var(--amarelo);
+  padding: 12px 16px;
+  margin: 24px 0 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+  color: #5a3e10;
+}
+.aviso-iterativo strong { color: #7a4f10; }
+
+/* ── Lista de etapas ──────────────────────────────────────────────── */
+.etapas-lista { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+
+/* ── Bloco de etapa ───────────────────────────────────────────────── */
+.etapa {
+  background: #fff;
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--radius);
+  box-shadow: var(--sombra);
+  overflow: hidden;
+}
+
+.etapa-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
+  transition: background .15s;
+}
+.etapa-header:hover { background: var(--cinza); }
+.etapa.aberta > .etapa-header { background: var(--azul-claro); border-bottom: 1px solid var(--cinza-borda); }
+
+.etapa-num {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--azul);
+  color: #fff;
+  font-family: system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background .2s;
+}
+.etapa.concluida > .etapa-header .etapa-num {
+  background: var(--verde);
+}
+.etapa.concluida > .etapa-header .etapa-num::after {
+  content: '✓';
+}
+.etapa.concluida > .etapa-header .etapa-num { font-size: 16px; }
+
+.etapa-titulo-bloco { flex: 1; }
+.etapa-titulo {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--azul);
+  line-height: 1.2;
+}
+.etapa.concluida > .etapa-header .etapa-titulo { color: var(--verde); }
+.etapa-momento {
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-size: 10px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--texto-sec);
+  margin-top: 2px;
+}
+.etapa-produto-pill {
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  background: var(--cinza);
+  border: 1px solid var(--cinza-borda);
+  border-radius: 20px;
+  padding: 3px 10px;
+  color: var(--texto-sec);
+  white-space: nowrap;
+  display: none;
+}
+@media (min-width: 560px) { .etapa-produto-pill { display: inline-block; } }
+.etapa-chevron {
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-size: 24px;
+  color: var(--texto-sec);
+  transition: transform .2s;
+  flex-shrink: 0;
+}
+.etapa.aberta > .etapa-header .etapa-chevron { transform: rotate(180deg); }
+
+/* ── Conteúdo expandido ───────────────────────────────────────────── */
+.etapa-corpo {
+  display: none;
+  padding: 20px 22px 24px;
+}
+.etapa.aberta > .etapa-corpo { display: block; }
+
+.etapa-descricao {
+  font-size: 15px;
+  color: var(--texto);
+  margin-bottom: 18px;
+  padding: 10px 14px;
+  background: var(--cinza);
+  border-radius: var(--radius);
+}
+
+/* Checklist */
+.checklist-titulo {
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--texto-sec);
+  margin-bottom: 10px;
+}
+.checklist { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+.checklist li input[type="checkbox"] {
+  width: 17px; height: 17px;
+  margin-top: 3px;
+  flex-shrink: 0;
+  accent-color: var(--azul);
+  cursor: pointer;
+}
+.checklist li label { cursor: pointer; }
+.checklist li.marcado label {
+  color: var(--texto-sec);
+  text-decoration: line-through;
+  text-decoration-color: var(--cinza-borda);
+}
+.checklist li label strong { font-weight: 600; color: var(--texto); }
+.checklist li.marcado label strong { color: var(--texto-sec); }
+
+/* Produto */
+.produto-bloco {
+  background: var(--verde-bg);
+  border: 1px solid #b2d8b2;
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  color: var(--verde);
+  margin-bottom: 16px;
+}
+.produto-bloco .rotulo { font-weight: 700; }
+
+/* Nota de retorno */
+.nota-retorno {
+  background: var(--amarelo-bg);
+  border: 1px solid #f5c97a;
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+  color: #7a4f00;
+  margin-bottom: 16px;
+}
+
+/* Callout DeIA */
+.deia-callout {
+  background: var(--deia-bg);
+  border: 1px solid var(--deia-borda);
+  border-left: 4px solid var(--deia-borda);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 14px 16px;
+  margin-top: 4px;
+}
+.deia-callout-titulo {
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--deia-texto);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.deia-callout-titulo .icone { font-size: 14px; }
+.deia-callout p { font-size: 13.5px; color: #1e3a5f; line-height: 1.55; }
+.deia-callout p + p { margin-top: 8px; }
+.deia-callout a {
+  color: var(--azul-mid);
+  font-weight: 600;
+  text-decoration: none;
+}
+.deia-callout a:hover { text-decoration: underline; }
+
+/* ── Secção de síntese ────────────────────────────────────────────── */
+.sintese {
+  margin-top: 36px;
+  background: #fff;
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--radius);
+  box-shadow: var(--sombra);
+  overflow: hidden;
+}
+.sintese-header {
+  background: var(--azul);
+  color: #fff;
+  padding: 14px 20px;
+  font-family: system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .04em;
+}
+.sintese-tabela-wrap { overflow-x: auto; }
+table.sintese-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+table.sintese-tabela th {
+  background: var(--azul-claro);
+  color: var(--azul);
+  font-family: system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 2px solid var(--cinza-borda);
+}
+table.sintese-tabela td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--cinza);
+  vertical-align: top;
+  line-height: 1.5;
+}
+table.sintese-tabela tr:last-child td { border-bottom: none; }
+table.sintese-tabela tr:hover td { background: var(--cinza); }
+table.sintese-tabela .etapa-col { font-weight: 600; color: var(--azul); white-space: nowrap; }
+table.sintese-tabela .agente-deia { color: var(--texto); font-weight: normal; }
+table.sintese-tabela .agente-prof { color: var(--azul-mid); font-weight: 600; }
+table.sintese-tabela .agente-ambos { color: var(--azul-mid); font-weight: 600; }
+table.sintese-tabela .produto-col { color: var(--verde); font-weight: 600; }
+
+/* ── Rodapé ───────────────────────────────────────────────────────── */
+footer {
+  margin-top: 48px;
+  padding: 20px 0;
+  border-top: 1px solid var(--cinza-borda);
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  color: var(--texto-sec);
+  text-align: center;
+  line-height: 1.8;
+}
+footer em { font-style: normal; color: var(--azul); font-weight: 600; }
+
+/* ── Pergunta acionável à DeIA ────────────────────────────────────── */
+.deia-pergunta {
+  font-family: system-ui, sans-serif;
+  font-size: 13.5px;
+  background: #fff;
+  border: 1px dashed var(--deia-borda);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  color: var(--texto-sec);
+}
+.deia-pergunta strong { color: var(--azul-mid); }
+
+/* ── Trilha Etapa → Produto → Evidência ───────────────────────────── */
+.trilha {
+  background: #fff;
+  border: 1px solid var(--cinza-borda);
+  border-top: none;
+  padding: 10px 24px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-family: system-ui, sans-serif;
+}
+.trilha-item {
+  font-size: 11px;
+  color: var(--texto-sec);
+  border: 1px solid var(--cinza-borda);
+  border-radius: 12px;
+  padding: 3px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  background: var(--cinza);
+}
+.trilha-item .num { font-weight: 700; color: var(--azul); }
+.trilha-item .evidencia { font-weight: 600; }
+.trilha-item:hover { border-color: var(--azul-mid); }
+.trilha-item.completa { background: var(--verde-bg); border-color: var(--verde); color: var(--verde); }
+.trilha-item.completa .num { color: var(--verde); }
+
+/* ── Foco visível (WCAG AA) ──────────────────────────────────────── */
+:focus-visible {
+  outline: 3px solid var(--azul-mid);
+  outline-offset: 2px;
+  border-radius: var(--radius);
+}
+.checklist li input[type="checkbox"]:focus-visible {
+  outline: 3px solid var(--azul-mid);
+  outline-offset: 3px;
+}
+
+/* ── Botão de ajuda no cabeçalho ──────────────────────────────────── */
+header { position: relative; }
+.btn-ajuda {
+  position: absolute; top: 14px; right: 20px;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.35);
+  color: #fff; font-family: system-ui, sans-serif;
+  font-size: 15px; font-weight: 700; line-height: 1;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background .15s;
+}
+.btn-ajuda:hover { background: rgba(255,255,255,.28); }
+
+/* ── Linha de exportação no bloco de ciclos ───────────────────────── */
+.ciclo-acoes-export {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+  padding-top: 10px; border-top: 1px solid var(--cinza);
+  margin-top: 8px;
+}
+.ciclo-acoes-export .rot-exp {
+  font-family: system-ui, sans-serif; font-size: 12px;
+  font-weight: 600; color: var(--texto-sec); white-space: nowrap; margin-right: 2px;
+}
+
+/* ── Modal base / animação ────────────────────────────────────────── */
+@keyframes entrar { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.60);
+  z-index: 900;
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+}
+.modal-overlay[hidden] { display: none; }
+
+/* ── Tutorial ─────────────────────────────────────────────────────── */
+.tut-caixa {
+  background: #fff; border-radius: 10px;
+  max-width: 500px; width: 100%;
+  box-shadow: 0 12px 48px rgba(0,0,0,.30);
+  overflow: hidden; animation: entrar .22s ease;
+}
+.tut-cabecalho {
+  background: var(--azul); color: #fff;
+  padding: 18px 22px 14px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.tut-label {
+  font-family: system-ui, sans-serif; font-size: 11px; font-weight: 700;
+  opacity: .75; text-transform: uppercase; letter-spacing: .07em;
+}
+.tut-fechar {
+  background: none; border: none; color: #fff; font-size: 24px;
+  line-height: 1; cursor: pointer; opacity: .65; padding: 0;
+  transition: opacity .15s; margin-left: 12px; flex-shrink: 0;
+}
+.tut-fechar:hover { opacity: 1; }
+.tut-slides { min-height: 190px; }
+.tut-slide { display: none; padding: 26px 26px 14px; }
+.tut-slide.ativo { display: block; }
+.tut-num {
+  display: flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--azul); color: #fff;
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-size: 18px; font-weight: 700;
+  margin-bottom: 14px;
+}
+.tut-slide h3 {
+  font-family: system-ui, sans-serif; font-size: 17px; font-weight: 700;
+  color: var(--azul); margin-bottom: 10px; line-height: 1.3;
+}
+.tut-slide p {
+  font-family: system-ui, sans-serif; font-size: 14px; color: var(--texto-sec);
+  line-height: 1.65; margin-bottom: 8px;
+}
+.tut-slide ul {
+  font-family: system-ui, sans-serif; font-size: 14px; color: var(--texto-sec);
+  line-height: 1.65; padding-left: 20px; margin-top: 6px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.tut-pontos { display: flex; justify-content: center; gap: 8px; padding: 10px 0 4px; }
+.tut-ponto {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--cinza-borda); border: none; cursor: pointer; padding: 0;
+  transition: background .2s;
+}
+.tut-ponto.ativo { background: var(--azul-mid); }
+.tut-rodape {
+  display: flex; align-items: center;
+  padding: 13px 22px 18px; border-top: 1px solid var(--cinza-borda);
+  margin-top: 8px; gap: 8px;
+}
+.btn-tut {
+  font-family: system-ui, sans-serif; font-size: 13px; font-weight: 600;
+  padding: 8px 18px; border-radius: var(--radius); cursor: pointer;
+  transition: background .15s;
+}
+.btn-tut-sec { background: none; border: 1px solid var(--cinza-borda); color: var(--texto-sec); }
+.btn-tut-sec:hover { background: var(--cinza); }
+.btn-tut-prim { background: var(--azul-mid); border: 1px solid transparent; color: #fff; margin-left: auto; }
+.btn-tut-prim:hover { background: var(--azul); }
+
+/* ── Relatório ────────────────────────────────────────────────────── */
+.rel-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.55);
+  z-index: 900;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 24px 12px 40px; overflow-y: auto;
+}
+.rel-overlay[hidden] { display: none; }
+.rel-caixa {
+  background: #fff; max-width: 700px; width: 100%;
+  border-radius: 8px; box-shadow: 0 12px 48px rgba(0,0,0,.25);
+  overflow: hidden; animation: entrar .22s ease;
+}
+.rel-barra {
+  background: var(--cinza); border-bottom: 1px solid var(--cinza-borda);
+  padding: 10px 16px; display: flex; gap: 8px; align-items: center;
+  font-family: system-ui, sans-serif; font-size: 12px; color: var(--texto-sec);
+}
+.rel-barra span { flex: 1; }
+.btn-rel {
+  font-family: system-ui, sans-serif; font-size: 12px; font-weight: 600;
+  padding: 6px 14px; border-radius: var(--radius); cursor: pointer;
+  transition: background .15s; white-space: nowrap;
+}
+.btn-rel-prim { background: var(--azul-mid); border: none; color: #fff; }
+.btn-rel-prim:hover { background: var(--azul); }
+.btn-rel-sec { background: #fff; border: 1px solid var(--cinza-borda); color: var(--texto-sec); }
+.btn-rel-sec:hover { background: var(--cinza); }
+.rel-corpo { padding: 28px 28px 20px; }
+.rel-h1 { font-size: 18px; font-weight: bold; color: var(--azul); margin-bottom: 3px; line-height: 1.3; }
+.rel-sub { font-family: system-ui, sans-serif; font-size: 12px; color: var(--texto-sec); margin-bottom: 18px; }
+.rel-meta {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 6px 16px; margin-bottom: 20px;
+  background: var(--cinza); border-radius: var(--radius); padding: 12px 14px;
+}
+.rel-meta-item { display: flex; flex-direction: column; gap: 1px; }
+.rel-rotulo { font-family: system-ui, sans-serif; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--texto-sec); }
+.rel-valor { font-family: system-ui, sans-serif; font-size: 13px; font-weight: 600; color: var(--texto); }
+.rel-etapa { margin-bottom: 12px; border: 1px solid var(--cinza-borda); border-radius: var(--radius); overflow: hidden; }
+.rel-etapa-hdr { display: flex; align-items: center; gap: 10px; padding: 9px 14px; font-family: system-ui, sans-serif; }
+.rel-etapa-hdr.ok { background: var(--verde-bg); }
+.rel-etapa-hdr.nok { background: var(--cinza); }
+.rel-enum {
+  width: 24px; height: 24px; border-radius: 50%;
+  font-size: 12px; font-weight: 700; font-family: system-ui, sans-serif;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.rel-etapa-hdr.ok .rel-enum { background: var(--verde); color: #fff; }
+.rel-etapa-hdr.nok .rel-enum { background: var(--cinza-borda); color: var(--texto-sec); }
+.rel-etapa-nome { font-weight: 600; font-size: 13px; flex: 1; }
+.rel-etapa-hdr.ok .rel-etapa-nome { color: var(--verde); }
+.rel-etapa-hdr.nok .rel-etapa-nome { color: var(--texto); }
+.rel-badge { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 700; }
+.rel-etapa-hdr.ok .rel-badge { background: var(--verde); color: #fff; }
+.rel-etapa-hdr.nok .rel-badge { background: var(--cinza-borda); color: var(--texto-sec); }
+.rel-items { padding: 8px 14px 10px; border-top: 1px solid var(--cinza-borda); }
+.rel-item {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-family: system-ui, sans-serif; font-size: 12px; padding: 5px 0;
+  border-bottom: 1px solid var(--cinza); line-height: 1.5; color: var(--texto-sec);
+}
+.rel-item:last-child { border-bottom: none; }
+.rel-item.ok { color: var(--texto); }
+.rel-item .ico { flex-shrink: 0; font-size: 13px; margin-top: 1px; }
+.rel-produto-linha {
+  margin: 0 14px 12px; padding: 7px 12px;
+  background: var(--verde-bg); border: 1px solid #b2d8b2; border-radius: var(--radius);
+  font-family: system-ui, sans-serif; font-size: 11px; color: var(--verde);
+}
+.rel-resumo {
+  margin-top: 18px; padding: 14px 16px; background: var(--azul-claro);
+  border-radius: var(--radius); border: 1px solid #c5d8ef;
+  font-family: system-ui, sans-serif; display: flex; gap: 24px; flex-wrap: wrap;
+}
+.rel-resumo-item { display: flex; flex-direction: column; gap: 2px; }
+.rel-resumo-rotulo { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--azul); }
+.rel-resumo-valor { font-size: 20px; font-weight: 700; color: var(--azul); }
+.rel-footer {
+  margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--cinza-borda);
+  font-family: system-ui, sans-serif; font-size: 11px; color: var(--texto-sec); line-height: 1.6;
+}
+
+/* ── Impressão ────────────────────────────────────────────────────── */
+@media print {
+  body { background: #fff; font-size: 11pt; }
+  header { background: var(--azul) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .progresso-bloco, .btn-reset, .aviso-iterativo, .ciclo-linha { display: none; }
+  .ciclo-bloco { border: 1px solid #999; padding: 10px 16px; }
+  .ident-campos input { border: none; border-bottom: 1px solid #999; border-radius: 0; }
+  .etapa { box-shadow: none; page-break-inside: avoid; }
+  .etapa-corpo { display: block !important; }
+  .etapa-chevron { display: none; }
+  .etapa-header { background: #f0f0f0 !important; cursor: default; }
+  .etapa.aberta > .etapa-header { background: #e0e8f5 !important; }
+  .checklist li input[type="checkbox"] { -webkit-print-color-adjust: exact; }
+  .deia-callout { background: #f0f7ff !important; border-color: #5b9bd5 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .sintese { page-break-before: always; }
+  footer { border-top: 1px solid #ccc; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrapper">
+    <p class="instituicao">Cefor / Ifes — Pesquisa EDR — Fávero (2026)</p>
+    <h1>Protocolo de Atenção para Criação de Conteúdos Educacionais com IA Generativa</h1>
+    <p class="subtitulo">O protocolo é uma ferramenta criada a partir de uma pesquisa e que busca permitir aos docentes ou aos profissionais da educação pontos de reflexão e um sistema de etapas para escolha e uso de IAGen para produção de conteúdos educacionais.</p>
+    <a class="deia-link" href="https://chatgpt.com/g/g-68a1d7869dc08191b2273baa1d773ac8-deia-designer-educacional-experimental" target="_blank" rel="noopener">🤖 Acessar a DeIA</a>
+  </div>
+  <button class="btn-ajuda" onclick="mostrarTutorial()" aria-label="Como usar este protocolo — abrir tutorial">?</button>
+</header>
+
+<div class="aviso-iterativo wrapper" style="margin:16px auto 0;border-left:none;border-radius:var(--radius);text-align:center;">
+  <strong>Uso iterativo:</strong> o protocolo é sequencial, mas não linear — resultados negativos em etapas posteriores implicam retorno às etapas anteriores para refinamento. Seu progresso é salvo automaticamente neste navegador: você pode fechar a página e continuar depois, no mesmo dispositivo.
+</div>
+
+<div class="progresso-bloco wrapper" id="progresso-bloco">
+  <span class="progresso-texto" id="progresso-texto" aria-live="polite" role="status">0 / 7 etapas concluídas</span>
+  <div class="progresso-barra-wrap">
+    <div class="progresso-barra" id="progresso-barra" style="width:0%"></div>
+  </div>
+  <button class="btn-reset" onclick="resetarTudo()">Reiniciar</button>
+</div>
+
+<div class="ciclo-bloco wrapper">
+  <div class="ciclo-linha">
+    <label class="ciclo-label" for="ciclo-select">Ciclo de criação:</label>
+    <select id="ciclo-select" onchange="trocarCiclo(this.value)"></select>
+    <button class="btn-ciclo" onclick="novoCiclo()">+ Novo ciclo</button>
+    <button class="btn-ciclo" onclick="excluirCiclo()">Excluir</button>
+    <button class="btn-ciclo" onclick="exportarCiclo()">Salvar arquivo</button>
+    <button class="btn-ciclo" onclick="document.getElementById('arquivo-ciclo').click()">Abrir arquivo</button>
+    <input type="file" id="arquivo-ciclo" accept="application/json,.json" onchange="importarCiclo(this)" hidden>
+  </div>
+  <div class="ident-campos">
+    <label>Nome do conteúdo<input type="text" id="ident-nome" placeholder="ex.: Videoaula — Fotossíntese, Módulo 2" onchange="salvarIdent()"></label>
+    <label>Responsável<input type="text" id="ident-resp" placeholder="nome do docente / designer instrucional" onchange="salvarIdent()"></label>
+    <label class="campo-data">Data<input type="date" id="ident-data" onchange="salvarIdent()"></label>
+  </div>
+  <div class="ciclo-acoes-export">
+    <span class="rot-exp">Exportar:</span>
+    <button class="btn-ciclo" onclick="gerarRelatorio()">📄 Relatório</button>
+    <button class="btn-ciclo" onclick="exportarMarkdown()">↓ Markdown</button>
+    <button class="btn-ciclo" onclick="exportarCSV()">↓ CSV</button>
+  </div>
+</div>
+
+<div class="trilha wrapper" id="trilha" aria-label="Trilha de produtos e evidências por etapa"></div>
+
+<div class="wrapper">
+
+  <div class="etapas-lista" id="etapas-lista">
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- ETAPA 1                                                        -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div class="etapa" id="etapa-1" data-etapa="1">
+      <div class="etapa-header" onclick="toggleEtapa(1)" role="button" aria-expanded="false" tabindex="0">
+        <div class="etapa-num" aria-label="Etapa 1">1</div>
+        <div class="etapa-titulo-bloco">
+          <div class="etapa-titulo">Intencionalidade pedagógica</div>
+          <div class="etapa-momento">Antes da geração de conteúdo</div>
+        </div>
+        <span class="etapa-produto-pill">Planejamento pedagógico</span>
+        <span class="etapa-chevron" aria-hidden="true">▾</span>
+      </div>
+      <div class="etapa-corpo">
+        <p class="etapa-descricao">
+          Antes de qualquer geração, o docente define o que precisa produzir e para quem.
+          Esse registro prévio é o contraponto humano que orienta e delimita a geração algorítmica.
+        </p>
+
+        <p class="checklist-titulo">Verificações desta etapa</p>
+        <ul class="checklist" id="cl-1">
+          <li data-id="1-1">
+            <input type="checkbox" id="c-1-1" onchange="marcar(this)">
+            <label for="c-1-1"><strong>Objetivo de aprendizagem:</strong> enunciado o que o estudante deverá ser capaz de fazer, saber ou ser ao final — formulado em termos observáveis e alinhado à taxonomia de objetivos adotada.</label>
+          </li>
+          <li data-id="1-2">
+            <input type="checkbox" id="c-1-2" onchange="marcar(this)">
+            <label for="c-1-2"><strong>Perfil do público:</strong> identificados nível de escolaridade, conhecimentos prévios, contexto sociocultural e eventuais necessidades específicas dos estudantes.</label>
+          </li>
+          <li data-id="1-3">
+            <input type="checkbox" id="c-1-3" onchange="marcar(this)">
+            <label for="c-1-3"><strong>Contexto instrucional:</strong> definida a modalidade (presencial, semipresencial, EaD), a plataforma de entrega (ex.: Moodle), a carga horária e o lugar do conteúdo na trilha de aprendizagem.</label>
+          </li>
+          <li data-id="1-4">
+            <input type="checkbox" id="c-1-4" onchange="marcar(this)">
+            <label for="c-1-4"><strong>Critérios de qualidade:</strong> estabelecidos os padrões pedagógicos, técnicos e éticos que o conteúdo final deve atender — incluindo legibilidade, carga cognitiva adequada (Sweller, 1988) e ausência de viés.</label>
+          </li>
+        </ul>
+
+        <div class="produto-bloco">
+          <span class="rotulo">Produto:</span>
+          <span>Planejamento pedagógico — registro escrito com objetivo, perfil, contexto e critérios de qualidade, que servirá de referência nas demais etapas.</span>
+        </div>
+
+        <div class="deia-callout">
+          <div class="deia-callout-titulo"><span class="icone">🤖</span> Quando usar a DeIA nesta etapa</div>
+          <p class="deia-pergunta">Pergunte à DeIA: <strong>"Meu objetivo de aprendizagem está claro e observável?"</strong></p>
+          <p>Ela atua como designer instrucional de plantão: ajuda a formular objetivos em linguagem pedagógica precisa, delinear o perfil do público e definir critérios de qualidade alinhados a Mayer (2005) e Sweller (1988).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- ETAPA 2                                                        -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div class="etapa" id="etapa-2" data-etapa="2">
+      <div class="etapa-header" onclick="toggleEtapa(2)" role="button" aria-expanded="false" tabindex="0">
+        <div class="etapa-num" aria-label="Etapa 2">2</div>
+        <div class="etapa-titulo-bloco">
+          <div class="etapa-titulo">Escolha da ferramenta de IA</div>
+          <div class="etapa-momento">Antes da geração</div>
+        </div>
+        <span class="etapa-produto-pill">Ferramenta escolhida</span>
+        <span class="etapa-chevron" aria-hidden="true">▾</span>
+      </div>
+      <div class="etapa-corpo">
+        <p class="etapa-descricao">
+          A ferramenta subordina-se ao objetivo — nunca o contrário: a escolha decorre de
+          julgamento pedagógico e ético fundado em critérios objetivos, ampliando a autonomia
+          de professor e estudante sem substituir o julgamento humano (Floridi, 2024).
+        </p>
+
+        <p class="checklist-titulo">Critérios de seleção</p>
+        <ul class="checklist" id="cl-2">
+          <li data-id="2-1">
+            <input type="checkbox" id="c-2-1" onchange="marcar(this)">
+            <label for="c-2-1"><strong>Adequação à natureza da tarefa:</strong> a ferramenta suporta o tipo de conteúdo a ser gerado (texto explicativo, questões, roteiro de vídeo, rubrica etc.) com qualidade suficiente para o nível e o contexto da Etapa 1.</label>
+          </li>
+          <li data-id="2-2">
+            <input type="checkbox" id="c-2-2" onchange="marcar(this)">
+            <label for="c-2-2"><strong>Grau de configurabilidade:</strong> o sistema permite parametrizar contexto, público e objetivo no prompt ou em configurações de sistema, reduzindo retrabalho nas etapas seguintes.</label>
+          </li>
+          <li data-id="2-3">
+            <input type="checkbox" id="c-2-3" onchange="marcar(this)">
+            <label for="c-2-3"><strong>Transparência e explicabilidade:</strong> a ferramenta informa fontes ou raciocínio empregado na geração — condição para auditoria humana do conteúdo (Floridi, 2024). O Referencial Brasileiro de Competências em IA para a Educação exige IA "aberta, auditável e inclusiva" (Ministério da Educação, 2026, p. 11): ferramentas opacas e não auditáveis devem ser evitadas em contextos institucionais públicos.</label>
+          </li>
+          <li data-id="2-4">
+            <input type="checkbox" id="c-2-4" onchange="marcar(this)">
+            <label for="c-2-4"><strong>Conformidade com a proteção de dados:</strong> o sistema trata dados em conformidade com a LGPD (Lei nº 13.709/2018) e, quando aplicável, com o AI Act (UE, 2024). Não retém insumos pedagógicos sensíveis nem dados de estudantes.</label>
+          </li>
+          <li data-id="2-5">
+            <input type="checkbox" id="c-2-5" onchange="marcar(this)">
+            <label for="c-2-5"><strong>Compatibilidade institucional:</strong> o uso é autorizado pelas políticas da instituição e não há restrições de acesso para os estudantes envolvidos.</label>
+          </li>
+          <li data-id="2-6">
+            <input type="checkbox" id="c-2-6" onchange="marcar(this)">
+            <label for="c-2-6"><strong>Histórico de confiabilidade factual:</strong> o desempenho conhecido da ferramenta na área temática e no idioma de trabalho é compatível com o esforço de verificação possível na Etapa 4.</label>
+          </li>
+          <li data-id="2-7">
+            <input type="checkbox" id="c-2-7" onchange="marcar(this)">
+            <label for="c-2-7"><strong>Domínio linguístico e adequação cultural:</strong> a ferramenta apresenta domínio adequado do português e não reproduz vieses culturais que comprometam equidade ou relevância do material.</label>
+          </li>
+        </ul>
+
+        <div class="produto-bloco">
+          <span class="rotulo">Produto:</span>
+          <span>Ferramenta escolhida, com justificativa breve dos critérios que a qualificam para esta tarefa específica.</span>
+        </div>
+
+        <div class="deia-callout">
+          <div class="deia-callout-titulo"><span class="icone">🤖</span> Quando usar a DeIA nesta etapa</div>
+          <p class="deia-pergunta">Pergunte à DeIA: <strong>"Qual ferramenta de IA é mais adequada para este tipo de tarefa?"</strong></p>
+          <p>Descreva a tarefa definida na Etapa 1 e peça a análise segundo os critérios acima — transparência, proteção de dados, compatibilidade institucional. O julgamento final permanece com o professor.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- ETAPA 3                                                        -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div class="etapa" id="etapa-3" data-etapa="3">
+      <div class="etapa-header" onclick="toggleEtapa(3)" role="button" aria-expanded="false" tabindex="0">
+        <div class="etapa-num" aria-label="Etapa 3">3</div>
+        <div class="etapa-titulo-bloco">
+          <div class="etapa-titulo">Design do prompt</div>
+          <div class="etapa-momento">Mediação intencional</div>
+        </div>
+        <span class="etapa-produto-pill">Prompt validado</span>
+        <span class="etapa-chevron" aria-hidden="true">▾</span>
+      </div>
+      <div class="etapa-corpo">
+        <p class="etapa-descricao">
+          O prompt é a operacionalização técnica da intenção pedagógica: cada elemento corresponde
+          a uma decisão da Etapa 1. Uma boa estrutura reduz ambiguidade e viabiliza a verificação posterior.
+        </p>
+
+        <p class="checklist-titulo">Elementos do prompt</p>
+        <ul class="checklist" id="cl-3">
+          <li data-id="3-1">
+            <input type="checkbox" id="c-3-1" onchange="marcar(this)">
+            <label for="c-3-1"><strong>Papel e contexto:</strong> definido o papel que a IA deve assumir (ex.: "Você é um redator de material didático para EaD em nível técnico") e o contexto institucional relevante.</label>
+          </li>
+          <li data-id="3-2">
+            <input type="checkbox" id="c-3-2" onchange="marcar(this)">
+            <label for="c-3-2"><strong>Objetivo de aprendizagem:</strong> incorporado explicitamente no prompt o objetivo definido na Etapa 1, para que o output seja orientado à meta pedagógica e não a um tópico genérico.</label>
+          </li>
+          <li data-id="3-3">
+            <input type="checkbox" id="c-3-3" onchange="marcar(this)">
+            <label for="c-3-3"><strong>Público-alvo:</strong> especificados nível de escolaridade, conhecimentos prévios e eventuais necessidades do público definidas na Etapa 1.</label>
+          </li>
+          <li data-id="3-4">
+            <input type="checkbox" id="c-3-4" onchange="marcar(this)">
+            <label for="c-3-4"><strong>Formato e extensão:</strong> definidos tipo de conteúdo (lista, texto corrido, tabela, questões etc.), extensão aproximada e estrutura esperada.</label>
+          </li>
+          <li data-id="3-5">
+            <input type="checkbox" id="c-3-5" onchange="marcar(this)">
+            <label for="c-3-5"><strong>Restrições éticas e técnicas:</strong> indicadas ao sistema as limitações a observar — vieses a evitar, dados sensíveis a não mencionar, referências a não inventar, nível de linguagem adequado.</label>
+          </li>
+          <li data-id="3-6">
+            <input type="checkbox" id="c-3-6" onchange="marcar(this)">
+            <label for="c-3-6"><strong>Critério de qualidade esperado:</strong> indicados os princípios cognitivos que o material deve respeitar — carga cognitiva adequada, princípio da coerência e princípio da sinalização (Mayer, 2005; Sweller, 1988) — além do padrão de linguagem esperado (ex.: acessível a estudantes do 1º ano).</label>
+          </li>
+        </ul>
+
+        <div class="produto-bloco">
+          <span class="rotulo">Produto:</span>
+          <span>Prompt validado — estruturado, documentado e reutilizável, registrado para possibilitar refinamento iterativo.</span>
+        </div>
+
+        <div class="deia-callout">
+          <div class="deia-callout-titulo"><span class="icone">🤖</span> Quando usar a DeIA nesta etapa</div>
+          <p class="deia-pergunta">Pergunte à DeIA: <strong>"Como posso melhorar este prompt?"</strong></p>
+          <p>Envie o rascunho do prompt e peça a verificação dos seis elementos acima antes de submetê-lo à ferramenta escolhida na Etapa 2.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- ETAPA 4                                                        -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div class="etapa" id="etapa-4" data-etapa="4">
+      <div class="etapa-header" onclick="toggleEtapa(4)" role="button" aria-expanded="false" tabindex="0">
+        <div class="etapa-num" aria-label="Etapa 4">4</div>
+        <div class="etapa-titulo-bloco">
+          <div class="etapa-titulo">Geração e primeira revisão</div>
+          <div class="etapa-momento">IA + análise técnica</div>
+        </div>
+        <span class="etapa-produto-pill">Rascunho avaliado</span>
+        <span class="etapa-chevron" aria-hidden="true">▾</span>
+      </div>
+      <div class="etapa-corpo">
+        <p class="etapa-descricao">
+          A IA gera o conteúdo e o docente realiza a primeira revisão técnica — ainda não a
+          validação pedagógica integral. Verificações negativas implicam retorno à Etapa 3.
+        </p>
+
+        <p class="checklist-titulo">Verificações desta etapa</p>
+        <ul class="checklist" id="cl-4">
+          <li data-id="4-1">
+            <input type="checkbox" id="c-4-1" onchange="marcar(this)">
+            <label for="c-4-1"><strong>Verificação de aderência:</strong> o conteúdo gerado responde ao objetivo de aprendizagem e ao formato definidos nas etapas anteriores.</label>
+          </li>
+          <li data-id="4-2">
+            <input type="checkbox" id="c-4-2" onchange="marcar(this)">
+            <label for="c-4-2"><strong>Análise de carga cognitiva:</strong> o material não é excessivamente denso; elementos supérfluos (carga estranha) foram eliminados e conexões entre elementos que precisam ser explicitadas (carga intrínseca) foram tratadas, conforme os princípios de Sweller (1988) e Mayer (2005).</label>
+          </li>
+          <li data-id="4-3">
+            <input type="checkbox" id="c-4-3" onchange="marcar(this)">
+            <label for="c-4-3"><strong>Verificação de viés:</strong> o conteúdo não reproduz estereótipos, generalizações indevidas ou perspectivas culturais inadequadas ao público-alvo.</label>
+          </li>
+          <li data-id="4-4">
+            <input type="checkbox" id="c-4-4" onchange="marcar(this)">
+            <label for="c-4-4"><strong>Verificação factual:</strong> as afirmações verificáveis foram conferidas em fontes primárias; imprecisões ou alucinações foram identificadas e sinalizadas para correção.</label>
+          </li>
+        </ul>
+
+        <div class="nota-retorno">
+          ⤴ Se qualquer verificação resultar negativa, refine o prompt (retorno à <strong>Etapa 3</strong>) antes de prosseguir. Não avance com conteúdo que não passou nas verificações técnicas.
+        </div>
+
+        <div class="produto-bloco">
+          <span class="rotulo">Produto:</span>
+          <span>Rascunho avaliado — output da IA com anotações do docente sobre ajustes necessários, pronto para a validação pedagógica humana.</span>
+        </div>
+
+        <div class="deia-callout">
+          <div class="deia-callout-titulo"><span class="icone">🤖</span> Quando usar a DeIA nesta etapa</div>
+          <p class="deia-pergunta">Pergunte à DeIA: <strong>"Que inconsistências técnicas você identifica neste conteúdo?"</strong></p>
+          <p>Cole o conteúdo gerado e use a resposta como apoio à revisão técnica — a decisão sobre cada ajuste permanece com o docente.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- ETAPA 5                                                        -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div class="etapa" id="etapa-5" data-etapa="5">
+      <div class="etapa-header" onclick="toggleEtapa(5)" role="button" aria-expanded="false" tabindex="0">
+        <div class="etapa-num" aria-label="Etapa 5">5</div>
+        <div class="etapa-titulo-bloco">
+          <div class="etapa-titulo">Validação pedagógica humana</div>
+          <div class="etapa-momento">Human-in-the-Loop</div>
+        </div>
+        <span class="etapa-produto-pill">Conteúdo validado</span>
+        <span class="etapa-chevron" aria-hidden="true">▾</span>
+      </div>
+      <div class="etapa-corpo">
+        <p class="etapa-descricao">
+          Etapa inegociável que operacionaliza o <em>Human-in-the-Loop</em>: o output é
+          rascunho-insumo, nunca produto final, e nenhuma decisão pedagógica é delegada ao sistema de IA.
+        </p>
+
+        <p class="checklist-titulo">Verificações desta etapa</p>
+        <ul class="checklist" id="cl-5">
+          <li data-id="5-1">
+            <input type="checkbox" id="c-5-1" onchange="marcar(this)">
+            <label for="c-5-1"><strong>Intervenção docente integral:</strong> o conteúdo foi lido, avaliado e editado pelo docente — não apenas aprovado sem revisão substantiva.</label>
+          </li>
+          <li data-id="5-2">
+            <input type="checkbox" id="c-5-2" onchange="marcar(this)">
+            <label for="c-5-2"><strong>Ajustes manuais realizados:</strong> trechos imprecisos, inadequados ao público ou desalinhados com os objetivos da Etapa 1 foram corrigidos diretamente pelo docente.</label>
+          </li>
+          <li data-id="5-3">
+            <input type="checkbox" id="c-5-3" onchange="marcar(this)">
+            <label for="c-5-3"><strong>Proporção de intervenção registrada:</strong> o grau de modificação humana em relação ao output original foi documentado, permitindo rastrear a autoria e avaliar a utilidade do processo (Selvam &amp; González Vallejo, 2025).</label>
+          </li>
+          <li data-id="5-4">
+            <input type="checkbox" id="c-5-4" onchange="marcar(this)">
+            <label for="c-5-4"><strong>Conteúdo final identificável:</strong> o produto resultante reflete o julgamento pedagógico do docente e pode ser identificado como trabalho intelectual docente mediado por IA — não como output autônomo do sistema.</label>
+          </li>
+        </ul>
+
+        <div class="produto-bloco">
+          <span class="rotulo">Produto:</span>
+          <span>Conteúdo validado pelo docente — versão editada, com registro da intervenção realizada, pronta para adequação ética.</span>
+        </div>
+
+        <div class="deia-callout">
+          <div class="deia-callout-titulo"><span class="icone">🤖</span> Quando usar a DeIA nesta etapa</div>
+          <p class="deia-pergunta">Pergunte à DeIA: <strong>"Este material está alinhado aos objetivos de aprendizagem?"</strong></p>
+          <p>Use a resposta como contraponto à sua leitura integral — a validação pedagógica é humana e não se delega.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- ETAPA 6                                                        -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div class="etapa" id="etapa-6" data-etapa="6">
+      <div class="etapa-header" onclick="toggleEtapa(6)" role="button" aria-expanded="false" tabindex="0">
+        <div class="etapa-num" aria-label="Etapa 6">6</div>
+        <div class="etapa-titulo-bloco">
+          <div class="etapa-titulo">Adequação ética e declaração de uso</div>
+          <div class="etapa-momento">Antes da publicação</div>
+        </div>
+        <span class="etapa-produto-pill">Conteúdo publicável</span>
+        <span class="etapa-chevron" aria-hidden="true">▾</span>
+      </div>
+      <div class="etapa-corpo">
+        <p class="etapa-descricao">
+          Transparência sobre o uso de IA é requisito ético e, progressivamente, legal
+          (Floridi, 2024; LGPD; AI Act, UE, 2024; PL 2.338/2023; Lei nº 9.610/1998):
+          antes de publicar, o docente verifica a conformidade e declara o uso de IA generativa.
+        </p>
+
+        <p class="checklist-titulo">Verificações desta etapa</p>
+        <ul class="checklist" id="cl-6">
+          <li data-id="6-1">
+            <input type="checkbox" id="c-6-1" onchange="marcar(this)">
+            <label for="c-6-1"><strong>Declaração de uso de IA:</strong> o material inclui nota informando que IA generativa foi utilizada no processo de criação, com indicação do sistema empregado e da natureza da intervenção humana realizada.</label>
+          </li>
+          <li data-id="6-2">
+            <input type="checkbox" id="c-6-2" onchange="marcar(this)">
+            <label for="c-6-2"><strong>Proteção de dados:</strong> o conteúdo não veicula dados pessoais de estudantes nem informações que violem a LGPD ou as políticas institucionais de privacidade.</label>
+          </li>
+          <li data-id="6-3">
+            <input type="checkbox" id="c-6-3" onchange="marcar(this)">
+            <label for="c-6-3"><strong>Direitos autorais (Lei nº 9.610/1998):</strong> trechos, imagens ou outros elementos de terceiros eventualmente incorporados foram identificados, e sua utilização está coberta por licença adequada ou uso educacional permissivo — lembrando que a IA pode gerar paráfrases de obras protegidas sem sinalizá-las.</label>
+          </li>
+          <li data-id="6-4">
+            <input type="checkbox" id="c-6-4" onchange="marcar(this)">
+            <label for="c-6-4"><strong>Acessibilidade:</strong> o material emprega linguagem simples e assegura texto alternativo nas imagens, contraste adequado, legendas nos vídeos, tradução em Libras quando possível e compatibilidade com leitores de tela.</label>
+          </li>
+        </ul>
+
+        <div class="produto-bloco">
+          <span class="rotulo">Produto:</span>
+          <span>Conteúdo publicável — versão final com declaração ética de uso de IA, pronta para publicação ou entrega, com nota de transparência incluída.</span>
+        </div>
+
+        <div class="deia-callout">
+          <div class="deia-callout-titulo"><span class="icone">🤖</span> Quando usar a DeIA nesta etapa</div>
+          <p class="deia-pergunta">Pergunte à DeIA: <strong>"Há riscos éticos, vieses ou problemas de acessibilidade?"</strong></p>
+          <p>Peça uma varredura final antes da publicação e confirme cada apontamento nas verificações acima.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- ETAPA 7                                                        -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div class="etapa" id="etapa-7" data-etapa="7">
+      <div class="etapa-header" onclick="toggleEtapa(7)" role="button" aria-expanded="false" tabindex="0">
+        <div class="etapa-num" aria-label="Etapa 7">7</div>
+        <div class="etapa-titulo-bloco">
+          <div class="etapa-titulo">Avaliação e iteração</div>
+          <div class="etapa-momento">Após a aplicação do conteúdo</div>
+        </div>
+        <span class="etapa-produto-pill">Repositório de práticas</span>
+        <span class="etapa-chevron" aria-hidden="true">▾</span>
+      </div>
+      <div class="etapa-corpo">
+        <p class="etapa-descricao">
+          O ciclo fecha com avaliação dos resultados e documentação dos aprendizados —
+          transformando a experiência individual em conhecimento institucional que alimenta o próximo ciclo.
+        </p>
+
+        <p class="checklist-titulo">Verificações desta etapa</p>
+        <ul class="checklist" id="cl-7">
+          <li data-id="7-1">
+            <input type="checkbox" id="c-7-1" onchange="marcar(this)">
+            <label for="c-7-1"><strong>Coletar indicadores de desempenho:</strong> obtidos dados sobre o desempenho dos estudantes com o conteúdo (engajamento, resultados de avaliação, feedbacks) que permitam avaliar a efetividade do material produzido.</label>
+          </li>
+          <li data-id="7-2">
+            <input type="checkbox" id="c-7-2" onchange="marcar(this)">
+            <label for="c-7-2"><strong>Registrar ajustes realizados:</strong> documentadas as modificações feitas no conteúdo gerado pela IA, com indicação das razões pedagógicas — construindo um histórico de uso que orienta próximas iterações.</label>
+          </li>
+          <li data-id="7-3">
+            <input type="checkbox" id="c-7-3" onchange="marcar(this)">
+            <label for="c-7-3"><strong>Utilizar informações para o próximo ciclo:</strong> os indicadores coletados informam ajustes na intencionalidade pedagógica (Etapa 1), na escolha da ferramenta (Etapa 2) ou no design do prompt (Etapa 3) do próximo conteúdo.</label>
+          </li>
+          <li data-id="7-4">
+            <input type="checkbox" id="c-7-4" onchange="marcar(this)">
+            <label for="c-7-4"><strong>Compartilhar boas práticas:</strong> os aprendizados relevantes foram compartilhados com pares — contribuindo para a construção de uma cultura institucional de uso ético e pedagógico da IA.</label>
+          </li>
+        </ul>
+
+        <div class="produto-bloco">
+          <span class="rotulo">Produto:</span>
+          <span>Repositório de práticas — registro de avaliação e aprendizados que alimenta o próximo ciclo de criação e contribui para a memória institucional de boas práticas com IA.</span>
+        </div>
+
+        <div class="deia-callout">
+          <div class="deia-callout-titulo"><span class="icone">🤖</span> Quando usar a DeIA nesta etapa</div>
+          <p class="deia-pergunta">Pergunte à DeIA: <strong>"Que melhorias podem ser feitas para uma próxima versão?"</strong></p>
+          <p>Apresente os indicadores coletados e registre as sugestões úteis no repositório de práticas.</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /etapas-lista -->
+
+  <!-- ─── Síntese ─────────────────────────────────────────────────── -->
+  <div class="sintese">
+    <div class="sintese-header">Síntese visual do protocolo</div>
+    <div class="sintese-tabela-wrap">
+      <table class="sintese-tabela">
+        <thead>
+          <tr>
+            <th>Etapa</th>
+            <th>Ação principal</th>
+            <th>Agente central</th>
+            <th>Produto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="etapa-col">1 — Intencionalidade pedagógica</td>
+            <td>Definir objetivo, público e critérios</td>
+            <td class="agente-prof">Professor / designer instrucional humano<span class="agente-deia">, com apoio de IA</span></td>
+            <td class="produto-col">Planejamento pedagógico</td>
+          </tr>
+          <tr>
+            <td class="etapa-col">2 — Escolha da ferramenta de IA</td>
+            <td>Escolher a IA</td>
+            <td class="agente-prof">Professor / designer instrucional humano<span class="agente-deia">, com apoio de IA</span></td>
+            <td class="produto-col">Ferramenta escolhida</td>
+          </tr>
+          <tr>
+            <td class="etapa-col">3 — Design do prompt</td>
+            <td>Elaborar instrução para a IA</td>
+            <td class="agente-prof">Professor / designer instrucional humano<span class="agente-deia">, com apoio de IA</span></td>
+            <td class="produto-col"><em>Prompt</em> validado</td>
+          </tr>
+          <tr>
+            <td class="etapa-col">4 — Geração e primeira revisão</td>
+            <td>Gerar e analisar o conteúdo</td>
+            <td class="agente-prof">Professor / designer instrucional humano<span class="agente-deia">, com apoio de IA</span></td>
+            <td class="produto-col">Rascunho avaliado</td>
+          </tr>
+          <tr>
+            <td class="etapa-col">5 — Validação pedagógica humana (HITL)</td>
+            <td>Revisar, ajustar e coautorar</td>
+            <td class="agente-prof">Professor / designer instrucional humano</td>
+            <td class="produto-col">Conteúdo validado</td>
+          </tr>
+          <tr>
+            <td class="etapa-col">6 — Adequação ética e declaração de uso</td>
+            <td>Declarar uso, proteger dados, verificar direitos</td>
+            <td class="agente-prof">Professor / gestor institucional</td>
+            <td class="produto-col">Conteúdo publicável</td>
+          </tr>
+          <tr>
+            <td class="etapa-col">7 — Avaliação e iteração</td>
+            <td>Coletar evidências e aperfeiçoar</td>
+            <td class="agente-prof">Professor / equipe pedagógica</td>
+            <td class="produto-col">Repositório de práticas</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer>
+    <p>Fávero, R. P. (2026). Protocolo de Atenção para Criação de Conteúdos Educacionais com IAGen. In <em>Carta Náutica para Travessia: Inteligência Artificial Generativa e Produção de Conteúdos Educacionais</em> (Seção 3.3). Cefor/Ifes.</p>
+    <p>Protocolo baseado em: Floridi (2024) · Mayer (2005) · Sweller (1988) · Selvam &amp; González Vallejo (2025) · Ministério da Educação (2026) · LGPD (2018) · AI Act (UE, 2024) · PL 2.338/2023 · Lei nº 9.610/1998</p>
+    <p style="margin-top:8px;font-size:11px;opacity:.7;">
+      <strong>Como seu trabalho é salvo:</strong> o progresso é gravado automaticamente neste navegador e reaparece quando você reabre a página no mesmo dispositivo.
+      Nenhum dado é enviado à internet — tudo permanece no seu computador.
+      Para guardar um registro permanente, continuar em outro computador ou arquivar institucionalmente, use <strong>Salvar arquivo</strong> (gera um arquivo <em>.json</em>, que pode ser reaberto com <strong>Abrir arquivo</strong>).
+      Para imprimir como folha de acompanhamento: <strong>Ctrl+P</strong> / <strong>⌘P</strong>.
+      Atenção: limpar os dados de navegação apaga o progresso automático — o arquivo salvo por você não é afetado.
+    </p>
+  </footer>
+
+</div><!-- /wrapper -->
+
+<!-- ─── Tutorial (modal de boas-vindas) ────────────────────────────────── -->
+<div id="tutorial-overlay" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Tutorial — como usar o protocolo" hidden>
+  <div class="tut-caixa">
+    <div class="tut-cabecalho">
+      <span class="tut-label">Como usar o protocolo</span>
+      <button class="tut-fechar" onclick="fecharTutorial()" aria-label="Fechar tutorial">×</button>
+    </div>
+    <div class="tut-slides">
+      <!-- Slide 1 -->
+      <div class="tut-slide ativo">
+        <span class="tut-num" aria-hidden="true">1</span>
+        <h3>As 7 etapas do protocolo</h3>
+        <p>Os <strong>blocos numerados de 1 a 7</strong> na página são as etapas do protocolo. Clique em qualquer bloco para abri-lo e ver suas verificações. Percorra-as na ordem 1 → 7.</p>
+        <ul>
+          <li>Cada etapa tem verificações a marcar, um produto esperado e dicas de uso da DeIA.</li>
+          <li>Se uma etapa posterior revelar problemas, retorne à etapa indicada.</li>
+          <li>Ao concluir todas as verificações de uma etapa, o círculo numerado fica verde.</li>
+        </ul>
+      </div>
+      <!-- Slide 2 -->
+      <div class="tut-slide">
+        <span class="tut-num" aria-hidden="true">2</span>
+        <h3>Um ciclo por conteúdo</h3>
+        <p>Cada conteúdo que você produz é um <strong>ciclo</strong>. Use o seletor para organizar diferentes produções sem misturar o progresso.</p>
+        <ul>
+          <li><strong>+ Novo ciclo</strong> — inicia uma nova produção.</li>
+          <li><strong>Salvar arquivo</strong> — baixa um <em>.json</em> para guardar permanentemente ou compartilhar.</li>
+          <li><strong>Abrir arquivo</strong> — importa um ciclo salvo anteriormente.</li>
+        </ul>
+      </div>
+      <!-- Slide 3 -->
+      <div class="tut-slide">
+        <span class="tut-num" aria-hidden="true">3</span>
+        <h3>Trilha, relatório e exportação</h3>
+        <p>A trilha de produtos mostra o status de cada etapa. Quando todas as verificações de uma etapa são marcadas, o bloco fica verde e exibe o ícone de confirmação (✓) no círculo numerado. Clique em qualquer item da trilha para navegar diretamente àquela etapa.</p>
+        <p>Ao concluir, use <strong>Relatório</strong> para gerar um resumo imprimível/PDF, ou exporte em <strong>Markdown</strong> e <strong>CSV</strong> para compilação institucional.</p>
+      </div>
+    </div>
+    <div class="tut-pontos" role="group" aria-label="Navegar entre slides">
+      <button class="tut-ponto ativo" aria-label="Slide 1 de 3" onclick="irParaSlide(0)"></button>
+      <button class="tut-ponto" aria-label="Slide 2 de 3" onclick="irParaSlide(1)"></button>
+      <button class="tut-ponto" aria-label="Slide 3 de 3" onclick="irParaSlide(2)"></button>
+    </div>
+    <div class="tut-rodape">
+      <button id="tut-btn-prev" class="btn-tut btn-tut-sec" style="visibility:hidden" aria-label="Slide anterior">← Anterior</button>
+      <button id="tut-btn-next" class="btn-tut btn-tut-prim">Próximo →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Relatório ───────────────────────────────────────────────────────── -->
+<div id="rel-overlay" class="rel-overlay" role="dialog" aria-modal="true" aria-label="Relatório do ciclo atual" hidden>
+  <div class="rel-caixa">
+    <div class="rel-barra">
+      <span>Relatório do ciclo atual</span>
+      <button class="btn-rel btn-rel-prim" onclick="imprimirRelatorio()">🖨 Imprimir / PDF</button>
+      <button class="btn-rel btn-rel-sec" onclick="fecharRelatorio()">Fechar</button>
+    </div>
+    <div class="rel-corpo" id="rel-corpo"></div>
+  </div>
+</div>
+
+<script>
+// ── Estado (ciclos múltiplos) ──────────────────────────────────────────
+// estrutura: { ativo: <id>, ciclos: { <id>: { nome, resp, data, checks: {} } } }
+const CHAVE = 'protocolo_cefor_v2';
+const CHAVE_ANTIGA = 'protocolo_cefor_v1';
+
+function novoCicloObj() {
+  return { nome: '', resp: '', data: new Date().toISOString().slice(0, 10), checks: {} };
+}
+function carregarEstado() {
+  try {
+    const v2 = JSON.parse(localStorage.getItem(CHAVE) || 'null');
+    if (v2 && v2.ciclos && v2.ativo && v2.ciclos[v2.ativo]) return v2;
+  } catch {}
+  // migração da versão anterior (checkboxes de ciclo único)
+  let checksAntigos = {};
+  try { checksAntigos = JSON.parse(localStorage.getItem(CHAVE_ANTIGA) || '{}'); } catch {}
+  const id = 'c' + Date.now();
+  const estado = { ativo: id, ciclos: { [id]: novoCicloObj() } };
+  estado.ciclos[id].checks = checksAntigos;
+  salvarEstado(estado);
+  return estado;
+}
+function salvarEstado(estado) {
+  try { localStorage.setItem(CHAVE, JSON.stringify(estado)); } catch {}
+}
+let ESTADO = carregarEstado();
+
+// ── Inicialização ───────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  renderizarSeletor();
+  renderizarTrilha();
+  aplicarCiclo();
+  abrirEtapa(1);
+  // Acessibilidade: aria-controls e region nas etapas
+  for (let n = 1; n <= 7; n++) {
+    const hdr = document.querySelector('#etapa-' + n + ' .etapa-header');
+    const corp = document.querySelector('#etapa-' + n + ' .etapa-corpo');
+    if (hdr && corp) {
+      corp.id = 'corpo-etapa-' + n;
+      hdr.setAttribute('aria-controls', 'corpo-etapa-' + n);
+      corp.setAttribute('role', 'region');
+      const titulo = document.querySelector('#etapa-' + n + ' .etapa-titulo');
+      if (titulo) corp.setAttribute('aria-label', titulo.textContent.trim());
+    }
+  }
+  // Tutorial na primeira visita
+  verificarTutorial();
+});
+
+// ── Trilha Etapa → Produto → Evidência ──────────────────────────────────
+const PRODUTOS = [
+  'Planejamento pedagógico', 'Ferramenta escolhida', 'Prompt validado',
+  'Rascunho avaliado', 'Conteúdo validado', 'Conteúdo publicável', 'Repositório de práticas'
+];
+
+function renderizarTrilha() {
+  const t = document.getElementById('trilha');
+  t.innerHTML = '';
+  for (let n = 1; n <= 7; n++) {
+    const s = document.createElement('span');
+    s.className = 'trilha-item';
+    s.id = 'trilha-' + n;
+    s.title = 'Abrir Etapa ' + n;
+    s.onclick = () => {
+      abrirEtapa(n);
+      const alvo = document.getElementById('etapa-' + n);
+      if (alvo.scrollIntoView) alvo.scrollIntoView({ behavior: 'smooth' });
+    };
+    t.appendChild(s);
+  }
+}
+
+// ── Ciclos ───────────────────────────────────────────────────────────────
+function aplicarCiclo() {
+  const c = ESTADO.ciclos[ESTADO.ativo];
+  document.querySelectorAll('.checklist input[type="checkbox"]').forEach(cb => {
+    cb.checked = !!c.checks[cb.id];
+    cb.closest('li').classList.toggle('marcado', cb.checked);
+  });
+  document.getElementById('ident-nome').value = c.nome || '';
+  document.getElementById('ident-resp').value = c.resp || '';
+  document.getElementById('ident-data').value = c.data || '';
+  atualizarProgresso();
+}
+
+function renderizarSeletor() {
+  const sel = document.getElementById('ciclo-select');
+  sel.innerHTML = '';
+  Object.entries(ESTADO.ciclos).forEach(([id, c]) => {
+    const opt = document.createElement('option');
+    opt.value = id;
+    opt.textContent = c.nome || '(conteúdo sem nome)';
+    if (id === ESTADO.ativo) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+function trocarCiclo(id) {
+  ESTADO.ativo = id;
+  salvarEstado(ESTADO);
+  aplicarCiclo();
+}
+
+function novoCiclo() {
+  const id = 'c' + Date.now();
+  ESTADO.ciclos[id] = novoCicloObj();
+  ESTADO.ativo = id;
+  salvarEstado(ESTADO);
+  renderizarSeletor();
+  aplicarCiclo();
+  document.getElementById('ident-nome').focus();
+}
+
+function excluirCiclo() {
+  const c = ESTADO.ciclos[ESTADO.ativo];
+  if (!confirm('Excluir o ciclo "' + (c.nome || 'conteúdo sem nome') + '" e todas as suas marcações?')) return;
+  delete ESTADO.ciclos[ESTADO.ativo];
+  const restantes = Object.keys(ESTADO.ciclos);
+  if (restantes.length === 0) {
+    const id = 'c' + Date.now();
+    ESTADO.ciclos[id] = novoCicloObj();
+    ESTADO.ativo = id;
+  } else {
+    ESTADO.ativo = restantes[0];
+  }
+  salvarEstado(ESTADO);
+  renderizarSeletor();
+  aplicarCiclo();
+}
+
+function salvarIdent() {
+  const c = ESTADO.ciclos[ESTADO.ativo];
+  c.nome = document.getElementById('ident-nome').value.trim();
+  c.resp = document.getElementById('ident-resp').value.trim();
+  c.data = document.getElementById('ident-data').value;
+  salvarEstado(ESTADO);
+  renderizarSeletor();
+}
+
+// ── Salvar / abrir arquivo ───────────────────────────────────────────────
+function exportarCiclo() {
+  const c = ESTADO.ciclos[ESTADO.ativo];
+  const blob = new Blob([JSON.stringify(c, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'protocolo_' + (c.nome ? c.nome.replace(/[^\wÀ-ú-]+/g, '_') : 'ciclo') + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function importarCiclo(input) {
+  const arq = input.files[0];
+  if (!arq) return;
+  const leitor = new FileReader();
+  leitor.onload = () => {
+    try {
+      const c = JSON.parse(leitor.result);
+      if (!c || typeof c.checks !== 'object') throw new Error('formato');
+      const id = 'c' + Date.now();
+      ESTADO.ciclos[id] = {
+        nome: c.nome || arq.name.replace(/\.json$/i, ''),
+        resp: c.resp || '',
+        data: c.data || '',
+        checks: c.checks
+      };
+      ESTADO.ativo = id;
+      salvarEstado(ESTADO);
+      renderizarSeletor();
+      aplicarCiclo();
+    } catch {
+      alert('Arquivo inválido: selecione um .json salvo por este protocolo.');
+    }
+  };
+  leitor.readAsText(arq);
+  input.value = '';
+}
+
+// ── Toggle de etapa ─────────────────────────────────────────────────────
+function toggleEtapa(num) {
+  const el = document.getElementById('etapa-' + num);
+  if (el.classList.contains('aberta')) {
+    fecharEtapa(num);
+  } else {
+    abrirEtapa(num);
+  }
+}
+
+function abrirEtapa(num) {
+  const el = document.getElementById('etapa-' + num);
+  el.classList.add('aberta');
+  el.querySelector('.etapa-header').setAttribute('aria-expanded', 'true');
+}
+
+function fecharEtapa(num) {
+  const el = document.getElementById('etapa-' + num);
+  el.classList.remove('aberta');
+  el.querySelector('.etapa-header').setAttribute('aria-expanded', 'false');
+}
+
+// Teclado
+document.querySelectorAll('.etapa-header').forEach(h => {
+  h.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      h.click();
+    }
+  });
+});
+
+// ── Marcar checkbox ─────────────────────────────────────────────────────
+function marcar(cb) {
+  const li = cb.closest('li');
+  li.classList.toggle('marcado', cb.checked);
+  const c = ESTADO.ciclos[ESTADO.ativo];
+  if (cb.checked) { c.checks[cb.id] = true; }
+  else { delete c.checks[cb.id]; }
+  salvarEstado(ESTADO);
+  atualizarProgresso();
+}
+
+// ── Progresso ────────────────────────────────────────────────────────────
+function atualizarProgresso() {
+  let concluidas = 0;
+  for (let n = 1; n <= 7; n++) {
+    const checkboxes = document.querySelectorAll('#cl-' + n + ' input[type="checkbox"]');
+    const todos = [...checkboxes].every(cb => cb.checked);
+    const bloco = document.getElementById('etapa-' + n);
+    bloco.classList.toggle('concluida', todos && checkboxes.length > 0);
+    if (todos && checkboxes.length > 0) concluidas++;
+    // evidência na trilha: nº de verificações marcadas por etapa
+    const item = document.getElementById('trilha-' + n);
+    if (item) {
+      const feitos = [...checkboxes].filter(cb => cb.checked).length;
+      const completa = todos && checkboxes.length > 0;
+      item.classList.toggle('completa', completa);
+      item.innerHTML = '<span class="num">' + n + '</span> ' + PRODUTOS[n - 1] +
+        ' <span class="evidencia">' + feitos + '/' + checkboxes.length + (completa ? ' ✓' : '') + '</span>';
+    }
+  }
+  const pct = Math.round((concluidas / 7) * 100);
+  document.getElementById('progresso-barra').style.width = pct + '%';
+  document.getElementById('progresso-texto').textContent =
+    concluidas + ' / 7 etapa' + (concluidas !== 1 ? 's' : '') + ' concluída' + (concluidas !== 1 ? 's' : '');
+}
+
+// ── Reset ────────────────────────────────────────────────────────────────
+function resetarTudo() {
+  if (!confirm('Deseja desmarcar todas as verificações deste ciclo? (Os demais ciclos não serão afetados.)')) return;
+  ESTADO.ciclos[ESTADO.ativo].checks = {};
+  salvarEstado(ESTADO);
+  aplicarCiclo();
+  abrirEtapa(1);
+}
+
+// ── Tutorial ──────────────────────────────────────────────────────────────
+const CHAVE_TUTORIAL = 'protocolo_cefor_tutorial_v1';
+let _slideAtivo = 0;
+const _TOTAL_SLIDES = 3;
+let _focoAntesTutorial = null;
+
+function verificarTutorial() {
+  if (!localStorage.getItem(CHAVE_TUTORIAL)) mostrarTutorial();
+}
+
+function mostrarTutorial() {
+  _slideAtivo = 0;
+  irParaSlide(0);
+  const ov = document.getElementById('tutorial-overlay');
+  ov.removeAttribute('hidden');
+  _focoAntesTutorial = document.activeElement;
+  document.getElementById('tut-btn-next').focus();
+  document.body.style.overflow = 'hidden';
+}
+
+function fecharTutorial() {
+  document.getElementById('tutorial-overlay').setAttribute('hidden', '');
+  localStorage.setItem(CHAVE_TUTORIAL, '1');
+  document.body.style.overflow = '';
+  if (_focoAntesTutorial) _focoAntesTutorial.focus();
+}
+
+function irParaSlide(n) {
+  _slideAtivo = n;
+  document.querySelectorAll('.tut-slide').forEach((s, i) => s.classList.toggle('ativo', i === n));
+  document.querySelectorAll('.tut-ponto').forEach((p, i) => p.classList.toggle('ativo', i === n));
+  const prev = document.getElementById('tut-btn-prev');
+  const next = document.getElementById('tut-btn-next');
+  prev.style.visibility = n === 0 ? 'hidden' : 'visible';
+  if (n === _TOTAL_SLIDES - 1) {
+    next.textContent = 'Entendi';
+    next.onclick = fecharTutorial;
+  } else {
+    next.textContent = 'Próximo →';
+    next.onclick = () => irParaSlide(_slideAtivo + 1);
+  }
+  prev.onclick = () => irParaSlide(_slideAtivo - 1);
+}
+
+// Teclado no tutorial
+document.getElementById('tutorial-overlay').addEventListener('keydown', e => {
+  if (e.key === 'Escape') { fecharTutorial(); return; }
+  if (e.key !== 'Tab') return;
+  const foc = [...document.getElementById('tutorial-overlay').querySelectorAll('button')];
+  const idx = foc.indexOf(document.activeElement);
+  if (e.shiftKey) {
+    if (idx <= 0) { e.preventDefault(); foc[foc.length - 1].focus(); }
+  } else {
+    if (idx >= foc.length - 1) { e.preventDefault(); foc[0].focus(); }
+  }
+});
+
+function anteriorSlide() { if (_slideAtivo > 0) irParaSlide(_slideAtivo - 1); }
+
+// ── Utilidade: texto puro a partir de HTML ────────────────────────────────
+function stripHTML(html) {
+  const d = document.createElement('div');
+  d.innerHTML = html;
+  return (d.textContent || d.innerText || '').trim();
+}
+
+// ── Relatório ─────────────────────────────────────────────────────────────
+let _focoAntesRelatorio = null;
+
+function gerarRelatorio() {
+  const c = ESTADO.ciclos[ESTADO.ativo];
+  const hoje = new Date().toLocaleDateString('pt-BR');
+  const dataFmt = c.data ? new Date(c.data + 'T00:00').toLocaleDateString('pt-BR') : '—';
+  let html = '';
+  html += '<div class="rel-h1">Relatório de Ciclo — Protocolo de Atenção</div>';
+  html += '<div class="rel-sub">Cefor/Ifes · Fávero (2026) · Gerado em ' + hoje + '</div>';
+  html += '<div class="rel-meta">';
+  html += '<div class="rel-meta-item"><span class="rel-rotulo">Conteúdo</span><span class="rel-valor">' + escHTML(c.nome || '(sem nome)') + '</span></div>';
+  html += '<div class="rel-meta-item"><span class="rel-rotulo">Responsável</span><span class="rel-valor">' + escHTML(c.resp || '—') + '</span></div>';
+  html += '<div class="rel-meta-item"><span class="rel-rotulo">Data</span><span class="rel-valor">' + dataFmt + '</span></div>';
+  html += '</div>';
+  let totMarcados = 0, totItens = 0, etapasConcl = 0;
+  for (let n = 1; n <= 7; n++) {
+    const cbs = [...document.querySelectorAll('#cl-' + n + ' input[type="checkbox"]')];
+    const marc = cbs.filter(cb => cb.checked).length;
+    const concl = marc === cbs.length && cbs.length > 0;
+    if (concl) etapasConcl++;
+    totMarcados += marc; totItens += cbs.length;
+    const titulo = document.querySelector('#etapa-' + n + ' .etapa-titulo').textContent.trim();
+    const cls = concl ? 'ok' : 'nok';
+    html += '<div class="rel-etapa"><div class="rel-etapa-hdr ' + cls + '">';
+    html += '<div class="rel-enum">' + (concl ? '✓' : n) + '</div>';
+    html += '<div class="rel-etapa-nome">' + n + ' — ' + escHTML(titulo) + '</div>';
+    html += '<span class="rel-badge">' + marc + '/' + cbs.length + (concl ? ' ✓' : '') + '</span>';
+    html += '</div><div class="rel-items">';
+    cbs.forEach(cb => {
+      const lbl = document.querySelector('label[for="' + cb.id + '"]');
+      const txt = lbl ? stripHTML(lbl.innerHTML) : cb.id;
+      html += '<div class="rel-item' + (cb.checked ? ' ok' : '') + '"><span class="ico">' + (cb.checked ? '✅' : '⬜') + '</span><span>' + escHTML(txt) + '</span></div>';
+    });
+    html += '</div><div class="rel-produto-linha"><strong>Produto:</strong> ' + escHTML(PRODUTOS[n - 1]) + '</div></div>';
+  }
+  const pct = Math.round((etapasConcl / 7) * 100);
+  html += '<div class="rel-resumo">';
+  html += '<div class="rel-resumo-item"><span class="rel-resumo-rotulo">Etapas concluídas</span><span class="rel-resumo-valor">' + etapasConcl + '/7</span></div>';
+  html += '<div class="rel-resumo-item"><span class="rel-resumo-rotulo">Verificações marcadas</span><span class="rel-resumo-valor">' + totMarcados + '/' + totItens + '</span></div>';
+  html += '<div class="rel-resumo-item"><span class="rel-resumo-rotulo">Progresso geral</span><span class="rel-resumo-valor">' + pct + '%</span></div>';
+  html += '</div>';
+  html += '<div class="rel-footer">Protocolo de Atenção para Criação de Conteúdos Educacionais com IA Generativa · Fávero (2026) · Cefor/Ifes<br>Baseado em: Floridi (2024) · Mayer (2005) · Sweller (1988) · LGPD (2018) · AI Act (UE, 2024)</div>';
+  document.getElementById('rel-corpo').innerHTML = html;
+  const ov = document.getElementById('rel-overlay');
+  ov.removeAttribute('hidden');
+  _focoAntesRelatorio = document.activeElement;
+  ov.querySelector('button').focus();
+  document.body.style.overflow = 'hidden';
+}
+
+function fecharRelatorio() {
+  document.getElementById('rel-overlay').setAttribute('hidden', '');
+  document.body.style.overflow = '';
+  if (_focoAntesRelatorio) _focoAntesRelatorio.focus();
+}
+
+document.getElementById('rel-overlay').addEventListener('keydown', e => {
+  if (e.key === 'Escape') { fecharRelatorio(); return; }
+  if (e.key !== 'Tab') return;
+  const foc = [...document.getElementById('rel-overlay').querySelectorAll('button, a[href]')];
+  const idx = foc.indexOf(document.activeElement);
+  if (e.shiftKey) {
+    if (idx <= 0) { e.preventDefault(); foc[foc.length - 1].focus(); }
+  } else {
+    if (idx >= foc.length - 1) { e.preventDefault(); foc[0].focus(); }
+  }
+});
+
+function imprimirRelatorio() {
+  const c = ESTADO.ciclos[ESTADO.ativo];
+  const conteudo = document.getElementById('rel-corpo').innerHTML;
+  const win = window.open('', '_blank', 'width=820,height=720');
+  win.document.write('<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">');
+  win.document.write('<title>Relatório — ' + escHTML(c.nome || 'Ciclo') + '</title>');
+  win.document.write('<style>' + _cssImpressao() + '</style></head><body>');
+  win.document.write('<div class="corpo">' + conteudo + '</div></body></html>');
+  win.document.close();
+  win.focus();
+  setTimeout(() => win.print(), 400);
+}
+
+function _cssImpressao() {
+  return '*{box-sizing:border-box;margin:0;padding:0}' +
+    'body{font-family:Georgia,serif;font-size:11pt;color:#1c2126;background:#fff;padding:20mm 18mm}' +
+    '.rel-h1{font-size:16pt;font-weight:bold;color:#1a3a5c;margin-bottom:3px}' +
+    '.rel-sub{font-family:system-ui,sans-serif;font-size:9pt;color:#4a5568;margin-bottom:14px}' +
+    '.rel-meta{display:flex;flex-wrap:wrap;gap:6px 22px;background:#f4f5f7;padding:10px 14px;border-radius:4px;margin-bottom:16px}' +
+    '.rel-meta-item{display:flex;flex-direction:column;gap:1px}' +
+    '.rel-rotulo{font-family:system-ui,sans-serif;font-size:7pt;text-transform:uppercase;letter-spacing:.06em;color:#4a5568}' +
+    '.rel-valor{font-family:system-ui,sans-serif;font-size:11pt;font-weight:600}' +
+    '.rel-etapa{margin-bottom:10px;border:1px solid #d0d4db;border-radius:4px;page-break-inside:avoid;overflow:hidden}' +
+    '.rel-etapa-hdr{display:flex;align-items:center;gap:8px;padding:7px 12px;font-family:system-ui,sans-serif}' +
+    '.rel-etapa-hdr.ok{background:#edf7ed}.rel-etapa-hdr.nok{background:#f4f5f7}' +
+    '.rel-enum{width:22px;height:22px;border-radius:50%;font-size:10pt;font-weight:700;font-family:system-ui;display:flex;align-items:center;justify-content:center;flex-shrink:0}' +
+    '.rel-etapa-hdr.ok .rel-enum{background:#2d6a2d;color:#fff}.rel-etapa-hdr.nok .rel-enum{background:#d0d4db;color:#4a5568}' +
+    '.rel-etapa-nome{font-family:system-ui,sans-serif;font-weight:600;font-size:10pt;flex:1}' +
+    '.rel-etapa-hdr.ok .rel-etapa-nome{color:#2d6a2d}.rel-badge{font-family:system-ui,sans-serif;font-size:8pt;padding:2px 6px;border-radius:8px;font-weight:700}' +
+    '.rel-etapa-hdr.ok .rel-badge{background:#2d6a2d;color:#fff}.rel-etapa-hdr.nok .rel-badge{background:#d0d4db;color:#4a5568}' +
+    '.rel-items{padding:6px 12px 8px;border-top:1px solid #d0d4db}' +
+    '.rel-item{display:flex;align-items:flex-start;gap:6px;font-family:system-ui,sans-serif;font-size:9pt;padding:3px 0;border-bottom:1px solid #f4f5f7;line-height:1.5;color:#4a5568}' +
+    '.rel-item:last-child{border-bottom:none}.rel-item.ok{color:#1c2126}.ico{flex-shrink:0;font-size:10pt}' +
+    '.rel-produto-linha{margin:0 12px 10px;padding:5px 10px;background:#edf7ed;border:1px solid #b2d8b2;border-radius:4px;font-family:system-ui;font-size:9pt;color:#2d6a2d}' +
+    '.rel-resumo{margin-top:14px;padding:12px 14px;background:#e8f0fb;border-radius:4px;display:flex;gap:18px;flex-wrap:wrap}' +
+    '.rel-resumo-item{display:flex;flex-direction:column;gap:2px}' +
+    '.rel-resumo-rotulo{font-family:system-ui;font-size:7pt;text-transform:uppercase;letter-spacing:.06em;color:#1a3a5c}' +
+    '.rel-resumo-valor{font-family:system-ui;font-size:16pt;font-weight:700;color:#1a3a5c}' +
+    '.rel-footer{margin-top:14px;padding-top:10px;border-top:1px solid #d0d4db;font-family:system-ui;font-size:8pt;color:#4a5568;line-height:1.6}';
+}
+
+function escHTML(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Exportar Markdown ─────────────────────────────────────────────────────
+function exportarMarkdown() {
+  const c = ESTADO.ciclos[ESTADO.ativo];
+  const hoje = new Date().toLocaleDateString('pt-BR');
+  const dataFmt = c.data ? new Date(c.data + 'T00:00').toLocaleDateString('pt-BR') : '—';
+  let md = '# Protocolo de Atenção — Relatório de Ciclo\n\n';
+  md += '**Instituição:** Cefor/Ifes · Fávero (2026)  \n**Gerado em:** ' + hoje + '\n\n---\n\n';
+  md += '## Identificação\n\n| Campo | Valor |\n|---|---|\n';
+  md += '| Conteúdo | ' + (c.nome || '—') + ' |\n';
+  md += '| Responsável | ' + (c.resp || '—') + ' |\n';
+  md += '| Data | ' + dataFmt + ' |\n\n---\n\n';
+  let totM = 0, totI = 0, etConcl = 0;
+  for (let n = 1; n <= 7; n++) {
+    const cbs = [...document.querySelectorAll('#cl-' + n + ' input[type="checkbox"]')];
+    const marc = cbs.filter(cb => cb.checked).length;
+    const concl = marc === cbs.length && cbs.length > 0;
+    if (concl) etConcl++;
+    totM += marc; totI += cbs.length;
+    const titulo = document.querySelector('#etapa-' + n + ' .etapa-titulo').textContent.trim();
+    md += '## Etapa ' + n + ' — ' + titulo + ' [' + marc + '/' + cbs.length + (concl ? ' ✓' : '') + ']\n\n';
+    cbs.forEach(cb => {
+      const lbl = document.querySelector('label[for="' + cb.id + '"]');
+      md += (cb.checked ? '- [x] ' : '- [ ] ') + (lbl ? stripHTML(lbl.innerHTML) : cb.id) + '\n';
+    });
+    md += '\n**Produto:** ' + PRODUTOS[n - 1] + '\n\n';
+  }
+  md += '---\n\n## Resumo\n\n';
+  md += '- **Etapas concluídas:** ' + etConcl + '/7\n';
+  md += '- **Verificações marcadas:** ' + totM + '/' + totI + '\n';
+  md += '- **Progresso:** ' + Math.round((etConcl / 7) * 100) + '%\n\n---\n\n';
+  md += '*Protocolo de Atenção para Criação de Conteúdos Educacionais com IA Generativa · Fávero (2026) · Cefor/Ifes*\n';
+  _baixar(md, 'protocolo_' + _nomeFicheiro(c.nome) + '.md', 'text/markdown');
+}
+
+// ── Exportar CSV ──────────────────────────────────────────────────────────
+function exportarCSV() {
+  const c = ESTADO.ciclos[ESTADO.ativo];
+  const dataFmt = c.data ? new Date(c.data + 'T00:00').toLocaleDateString('pt-BR') : '';
+  const linhas = [['Conteúdo', 'Responsável', 'Data', 'Nº Etapa', 'Etapa', 'Verificação', 'Status']];
+  for (let n = 1; n <= 7; n++) {
+    const cbs = [...document.querySelectorAll('#cl-' + n + ' input[type="checkbox"]')];
+    const titulo = document.querySelector('#etapa-' + n + ' .etapa-titulo').textContent.trim();
+    cbs.forEach((cb, i) => {
+      const lbl = document.querySelector('label[for="' + cb.id + '"]');
+      linhas.push([
+        c.nome || '', c.resp || '', dataFmt,
+        String(n), n + ' — ' + titulo,
+        lbl ? stripHTML(lbl.innerHTML) : cb.id,
+        cb.checked ? 'Concluído' : 'Pendente'
+      ]);
+    });
+  }
+  const csv = linhas.map(r => r.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',')).join('\r\n');
+  _baixar('﻿' + csv, 'protocolo_' + _nomeFicheiro(c.nome) + '.csv', 'text/csv;charset=utf-8');
+}
+
+function _nomeFicheiro(nome) {
+  return nome ? nome.replace(/[^\wÀ-ú-]+/g, '_').slice(0, 50) : 'ciclo';
+}
+
+function _baixar(conteudo, nome, tipo) {
+  const blob = new Blob([conteudo], { type: tipo });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = nome;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+</script>
+
+</body>
+</html>
